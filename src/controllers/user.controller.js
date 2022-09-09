@@ -53,15 +53,21 @@ exports.update = async (req, res) => {
 }
 
 exports.remove = async (req, res) => {
-    //let find = false;
+    
+    let usersLength = users.length;
 
-    users = users.filter((user)=>{
-        if(user.id!==parseInt(req.params.id)){
-            return true;      
-        }
-    }) 
-    res.send({
-        success: true,
-        message: 'user removed'
-    })
+    users = users.filter((user)=> user.id!==parseInt(req.params.id))
+
+    let newUsersLength = users.length;
+
+    if(newUsersLength < usersLength) 
+        res.send({
+            success: true,
+            message: 'user removed'
+        })    
+    else 
+        res.send({
+            success: false,
+            message: 'user not found'
+        })
 }
