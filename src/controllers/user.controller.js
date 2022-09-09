@@ -24,7 +24,6 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
     users.forEach(user => {
-        console.dir(user)
         if (user.nome == req.body.nome && user.senha == req.body.senha){
             res.status(200).end()
         } 
@@ -34,6 +33,18 @@ exports.signin = async (req, res) => {
 
 
 exports.getUser = async (req, res) => {
+    let find = false
+    users.forEach(user => {
+        if (user.id === parseInt(req.params.id)) {
+            find = true;
+            res.send(user);
+        }
+    })
+    if (!find)
+        res.send({
+            success: false,
+            message: "user not found"
+        })
     
 }
 
@@ -42,5 +53,15 @@ exports.update = async (req, res) => {
 }
 
 exports.remove = async (req, res) => {
-    
+    //let find = false;
+
+    users = users.filter((user)=>{
+        if(user.id!==parseInt(req.params.id)){
+            return true;      
+        }
+    }) 
+    res.send({
+        success: true,
+        message: 'user removed'
+    })
 }
