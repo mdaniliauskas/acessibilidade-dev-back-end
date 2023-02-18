@@ -1,24 +1,39 @@
-let users = [];
+const { PrismaClient } = require('@prisma/client');
+const dayjs = require('dayjs');
+var customParseFormat = require('dayjs/plugin/customParseFormat')
 
-let id = 1;
-
-
+const prisma = new PrismaClient()
 
 exports.signup = async (req, res) => {
-    console.log(req.body);
-    const user = {
-        id: id++,
-        nome: req.body.nome,
-        sobrenome: req.body.sobrenome,
-        idade: req.body.idade,
-        senha: req.body.senha
-    }
+    const {
+        nome,
+        sobrenome,
+        data_nascimento,
+        email,
+        senha,
+        area_conhecimento,
+        possui_conhecimento
+    } = req.body;
+    dayjs.extend(customParseFormat)
+    parseDate = dayjs(data_nascimento, "DD-MM-YYYY").toDate()
 
-    users = [...users, user];
-    res.json({
-        success: true,
-        message: user
-    });
+    const usuario = await prisma.usuario.create({
+        data: {
+            nome,
+            sobrenome,
+            data_nascimento: parseDate,
+            email,
+            senha,
+            area_conhecimento,
+            possui_conhecimento
+        }
+    })
+
+    console.log(usuario)
+    res.status(200).json({
+        success: true
+    })
+
 };
 
 
