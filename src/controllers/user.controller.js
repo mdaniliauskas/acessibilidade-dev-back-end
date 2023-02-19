@@ -17,23 +17,29 @@ exports.signup = async (req, res) => {
     dayjs.extend(customParseFormat)
     parseDate = dayjs(data_nascimento, "DD-MM-YYYY").toDate()
 
-    const usuario = await prisma.usuario.create({
-        data: {
-            nome,
-            sobrenome,
-            data_nascimento: parseDate,
-            email,
-            senha,
-            area_conhecimento,
-            possui_conhecimento
-        }
-    })
-
-    console.log(usuario)
-    res.status(200).json({
-        success: true
-    })
-
+    try {
+        const usuario = await prisma.usuario.create({
+            data: {
+                nome,
+                sobrenome,
+                data_nascimento: parseDate,
+                email,
+                senha,
+                area_conhecimento,
+                possui_conhecimento
+            }
+        })
+        res.status(200).json({
+            success: true,
+            message: usuario
+        })
+    } catch (erro) {
+        res.status(500).json({
+            success: false,
+            message: erro
+        })
+    }
+    await prisma.$disconnect()
 };
 
 
