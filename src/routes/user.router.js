@@ -2,7 +2,7 @@
 const express = require('express');
 
 //Definição de rotas (caminhos que o usuário irá seguir)
-const router = express.Router(); 
+const router = express.Router();
 
 const userController = require('../controllers/user.controller')
 
@@ -14,15 +14,15 @@ router.post('/user/register', userController.signup);
 router.post('/user/login', userController.signin);
 
 
-router.get('/user/:id', userController.getUser);
+router.get('/user/:codigo_usuario', userController.getUser);
 
 //read
-router.get('/user');
+router.get('/user', userController.getAll);
 
 //update
-router.put('/user');
+router.put('/user/:codigo_usuario', userController.update);
 
 //delete
-router.delete('/user/:id', userController.remove);
+router.delete('/user/:codigo_usuario', userController.remove);
 
 module.exports = router;

@@ -44,51 +44,137 @@ exports.signup = async (req, res) => {
 
 
 exports.signin = async (req, res) => {
-    users.forEach(user => {
-        if (user.nome == req.body.nome && user.senha == req.body.senha) {
-            res.status(200).end()
+
+    const { email, senha } = req.body;
+    try {
+        const usuario = await prisma.usuario.findUnique({
+            where: {
+                email: email
+            }
+        })
+        if (usuario.senha === senha) {
+            res.status(200).json({
+                success: true,
+                message: usuario
+            })
+        } else {
+            res.status(500).json({
+                success: false,
+                message: "Senha incorreta"
+            })
         }
-    });
-    res.status(500).end()
+    } catch (erro) {
+        res.status(500).json({
+            success: false,
+            message: erro
+        })
+    }
+    await prisma.$disconnect()
 }
 
 
+
 exports.getUser = async (req, res) => {
-    let find = false
-    users.forEach(user => {
-        if (user.id === parseInt(req.params.id)) {
-            find = true;
-            res.send(user);
-        }
-    })
-    if (!find)
-        res.status(404).send({
-            success: false,
-            message: "user not found"
+    var usuario
+    try {
+        usuario = await prisma.usuario.findUnique({
+            where: {
+                codigo_usuario: parseInt(req.params.codigo_usuario)
+            }
         })
 
+    } catch (erro) {
+
+        res.status(500).json({
+            success: false,
+            message: erro
+        })
+    }
+    res.status(200).json({
+        success: true,
+        message: usuario
+    })
+    await prisma.$disconnect()
+
+}
+
+exports.getAll = async (req, res) => {
+
+    try {
+        const usuario = await prisma.usuario.findMany()
+        res.status(200).json({
+            success: true,
+            message: usuario
+        })
+    } catch (erro) {
+        res.status(500).json({
+            success: false,
+            message: erro
+        })
+    }
+    await prisma.$disconnect()
 }
 
 exports.update = async (req, res) => {
 
+    const {
+        nome,
+        sobrenome,
+        data_nascimento,
+        email,
+        senha,
+        area_conhecimento,
+        possui_conhecimento,
+        tipo_acesso
+    } = req.body;
+
+    try {
+        const usuario = await prisma.usuario.update({
+            where: {
+                codigo_usuario: parseInt(req.params.codigo_usuario)
+            },
+            data: {
+                nome,
+                sobrenome,
+                data_nascimento,
+                email,
+                senha,
+                area_conhecimento,
+                possui_conhecimento,
+                tipo_acesso
+            }
+        })
+        res.status(200).json({
+            success: true,
+            message: usuario
+        })
+    } catch (erro) {
+        res.status(500).json({
+            success: false,
+            message: erro
+        })
+    }
+    await prisma.$disconnect()
 }
 
 exports.remove = async (req, res) => {
 
-    let usersLength = users.length;
-
-    users = users.filter((user) => user.id !== parseInt(req.params.id))
-
-    let newUsersLength = users.length;
-
-    if (newUsersLength < usersLength)
-        res.send({
+    try {
+        const usuario = await prisma.usuario.delete({
+            where: {
+                codigo_usuario: parseInt(req.params.codigo_usuario)
+            }
+        })
+        res.status(200).json({
             success: true,
-            message: 'user removed'
+            message: usuario
         })
-    else
-        res.status(404).send({
+    } catch (erro) {
+        res.status(500).json({
             success: false,
-            message: 'user not found'
+            message: erro
         })
+    }
+    await prisma.$disconnect()
+
 }
