@@ -10,7 +10,7 @@ exports.User = class {
     email,
     senha,
     area_conhecimento,
-    possui_conhecimento,
+    deficiencia,
     tipo_acesso,
   }) {
     this.nome = nome;
@@ -19,7 +19,7 @@ exports.User = class {
     this.email = email;
     this.senha = senha;
     this.area_conhecimento = area_conhecimento;
-    this.possui_conhecimento = possui_conhecimento;
+    this.deficiencia = deficiencia;
     this.tipo_acesso = tipo_acesso;
   }
 

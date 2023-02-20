@@ -12,13 +12,13 @@ datasource db {
 }
 
 model Usuario {
-  codigo_usuario      Int       @id @default(autoincrement())
-  nome                String
-  sobrenome           String
-  data_nascimento     DateTime? @db.Date
-  email               String    @unique
-  senha               String
-  area_conhecimento   String?
-  possui_conhecimento String?
-  tipo_acesso         Int       @default(0)
+  codigo_usuario    Int       @id @default(autoincrement())
+  nome              String
+  sobrenome         String
+  data_nascimento   DateTime? @db.Date
+  email             String    @unique
+  senha             String
+  area_conhecimento String?
+  deficiencia       String?
+  tipo_acesso       Int       @default(0)
 }
