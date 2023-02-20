@@ -1,153 +1,100 @@
 const { User } = require("../models/user");
+const { buscarPorId, listar } = require("../services/user.dao");
 
 exports.signup = async (req, res) => {
-
   const objUsuario = new User(req.body);
-  const usuario = await objUsuario.cadastrar();
+  const retornoCadastrar = await objUsuario.cadastrar();
 
-  if (usuario.codigo_usuario) {
+  if (retornoCadastrar.codigo_usuario) {
     res.status(200).json({
       success: true,
-      message: usuario,
+      message: retornoCadastrar,
     });
   } else {
     res.status(500).json({
       success: false,
-      message: usuario,
+      message: retornoCadastrar,
     });
   }
 };
 
 exports.signin = async (req, res) => {
-  const { email, senha } = req.body;
-  try {
-    const usuario = await prisma.usuario.findUnique({
-      where: {
-        email: email,
-      },
+  const objUsuario = new User(req.body);
+  const retornoLogar = await objUsuario.logar();
+
+  if (retornoLogar.codigo_usuario) {
+    res.status(200).json({
+      success: true,
+      message: retornoLogar,
     });
-    if (usuario.senha === senha) {
-      res.status(200).json({
-        success: true,
-        message: usuario,
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: "Senha incorreta",
-      });
-    }
-  } catch (erro) {
-    res.status(500).json({
+  } else {
+    res.status(403).json({
       success: false,
-      message: erro,
+      message: retornoLogar,
     });
   }
-  await prisma.$disconnect();
 };
 
 exports.getUser = async (req, res) => {
-  var usuario;
-  try {
-    usuario = await prisma.usuario.findUnique({
-      where: {
-        codigo_usuario: parseInt(req.params.codigo_usuario),
-      },
+  const retornoBanco = await buscarPorId(req.params.codigo_usuario);
+  if (retornoBanco) {
+    res.status(200).json({
+      success: true,
+      message: retornoBanco,
     });
-
-    if (usuario == null) {
-      res.status(500).json({
-        success: false,
-        message: "Usuário não encontrado",
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: usuario,
-      });
-    }
-  } catch (erro) {
-    res.status(500).json({
+  } else {
+    res.status(404).json({
       success: false,
-      message: erro,
+      message: retornoBanco,
     });
   }
-  await prisma.$disconnect();
 };
 
 exports.getAll = async (req, res) => {
-  try {
-    const usuario = await prisma.usuario.findMany();
+  const retornoBanco = await listar();
+  if (retornoBanco) {
     res.status(200).json({
       success: true,
-      message: usuario,
+      message: retornoBanco,
     });
-  } catch (erro) {
-    res.status(500).json({
+  } else {
+    res.status(404).json({
       success: false,
-      message: erro,
+      message: retornoBanco,
     });
   }
-  await prisma.$disconnect();
 };
 
 exports.update = async (req, res) => {
-  const {
-    nome,
-    sobrenome,
-    data_nascimento,
-    email,
-    senha,
-    area_conhecimento,
-    possui_conhecimento,
-    tipo_acesso,
-  } = req.body;
+  const objUsuario = new User(req.body);
+  const retornoAtualizar = await objUsuario.atualizar(req.params);
 
-  try {
-    const usuario = await prisma.usuario.update({
-      where: {
-        codigo_usuario: parseInt(req.params.codigo_usuario),
-      },
-      data: {
-        nome,
-        sobrenome,
-        data_nascimento,
-        email,
-        senha,
-        area_conhecimento,
-        possui_conhecimento,
-        tipo_acesso,
-      },
-    });
+  if (retornoAtualizar.codigo_usuario) {
     res.status(200).json({
       success: true,
-      message: usuario,
+      message: retornoAtualizar,
     });
-  } catch (erro) {
-    res.status(500).json({
+  } else {
+    res.status(404).json({
       success: false,
-      message: erro,
+      message: retornoAtualizar,
     });
   }
-  await prisma.$disconnect();
 };
 
 exports.remove = async (req, res) => {
-  try {
-    const usuario = await prisma.usuario.delete({
-      where: {
-        codigo_usuario: parseInt(req.params.codigo_usuario),
-      },
-    });
+  const objUsuario = new User(req.body);
+  const retornoRemover = await objUsuario.excluir(req.params);
+
+  if (retornoRemover) {
     res.status(200).json({
       success: true,
-      message: usuario,
+      message: retornoRemover,
     });
-  } catch (erro) {
-    res.status(500).json({
+  } else {
+    res.status(404).json({
       success: false,
-      message: erro,
+      message: retornoRemover,
     });
   }
-  await prisma.$disconnect();
 };
