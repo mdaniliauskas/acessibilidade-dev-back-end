@@ -83,19 +83,25 @@ exports.getUser = async (req, res) => {
             }
         })
 
-    } catch (erro) {
+        if (usuario == null) {
+            res.status(500).json({
+                success: false,
+                message: "Usuário não encontrado"
+            })
+        } else {
+            res.status(200).json({
+                success: true,
+                message: usuario
+            })
+        }
 
+    } catch (erro) {
         res.status(500).json({
             success: false,
             message: erro
         })
     }
-    res.status(200).json({
-        success: true,
-        message: usuario
-    })
     await prisma.$disconnect()
-
 }
 
 exports.getAll = async (req, res) => {
