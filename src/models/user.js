@@ -1,8 +1,12 @@
-const { gravar, buscarPorEmail, atualizar, remover } = require("../services/user.dao");
-const bcrypt = require('bcrypt');
+const {
+  gravar,
+  buscarPorEmail,
+  atualizar,
+  remover,
+} = require("../services/user.dao");
+const bcrypt = require("bcrypt");
 
 exports.User = class {
-
   constructor({
     nome,
     sobrenome,
@@ -15,15 +19,13 @@ exports.User = class {
   }) {
     this.nome = nome;
     this.sobrenome = sobrenome;
-    this.data_nascimento = data_nascimento
+    this.data_nascimento = data_nascimento;
     this.email = email;
     this.senha = senha;
     this.area_conhecimento = area_conhecimento;
     this.deficiencia = deficiencia;
     this.tipo_acesso = tipo_acesso;
   }
-
-
 
   async cadastrar() {
     // criptografar senha
@@ -35,10 +37,10 @@ exports.User = class {
     return await gravar(this);
   }
 
-  async logar() { 
+  async logar() {
     // buscar o usuário no banco de dados
     const usuario = await buscarPorEmail(this.email);
-    if (usuario && await bcrypt.compare(this.senha, usuario.senha)) { 
+    if (usuario && (await bcrypt.compare(this.senha, usuario.senha))) {
       return usuario;
     }
     return "Usuário ou senha incorretos";
@@ -51,6 +53,6 @@ exports.User = class {
 
   async excluir({ codigo_usuario }) {
     // excluir o usuário
-    return await remover( codigo_usuario);
+    return await remover(codigo_usuario);
   }
 };
