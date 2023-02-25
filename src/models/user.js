@@ -1,58 +1,53 @@
-const {
-  gravar,
-  buscarPorEmail,
-  atualizar,
-  remover,
-} = require("../services/user.dao");
+const { save, searchByEmail, update, remove } = require("../services/user.dao");
 const bcrypt = require("bcrypt");
 
 exports.User = class {
-  constructor({
-    nome,
-    sobrenome,
-    data_nascimento,
-    email,
-    senha,
-    area_conhecimento,
-    deficiencia,
-    tipo_acesso,
+  constructor({     
+  first_name,
+  last_name,
+  birth_date,
+  email,
+  password,
+  specialist_area,
+  disability,   
+  access_control,
   }) {
-    this.nome = nome;
-    this.sobrenome = sobrenome;
-    this.data_nascimento = data_nascimento;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.birth_date = birth_date;
     this.email = email;
-    this.senha = senha;
-    this.area_conhecimento = area_conhecimento;
-    this.deficiencia = deficiencia;
-    this.tipo_acesso = tipo_acesso;
+    this.password = password;
+    this.specialist_area = specialist_area;
+    this.disability = disability;
+    this.access_control = access_control;
   }
 
-  async cadastrar() {
+  async register() {
     // criptografar senha
     // precisa melhorar essa parte
-    this.senha = await bcrypt.hash(this.senha, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     // converter data de nascimento para o formato do banco de dados
-    this.data_nascimento = new Date(this.data_nascimento);
+    this.birth_date = new Date(this.birth_date);
     // salvar no banco de dados e retornar o usuário
-    return await gravar(this);
+    return await save(this);
   }
 
-  async logar() {
+  async signin() {
     // buscar o usuário no banco de dados
-    const usuario = await buscarPorEmail(this.email);
-    if (usuario && (await bcrypt.compare(this.senha, usuario.senha))) {
-      return usuario;
+    const user = await searchByEmail(this.email);
+    if (user && (await bcrypt.compare(this.password, user.password))) {
+      return user;
     }
     return "Usuário ou senha incorretos";
   }
 
-  async atualizar({ codigo_usuario }) {
+  async update({ id }) {
     // atualizar os dados
-    return await atualizar(codigo_usuario, this);
+    return await update(id, this);
   }
 
-  async excluir({ codigo_usuario }) {
+  async delete({ id }) {
     // excluir o usuário
-    return await remover(codigo_usuario);
+    return await remove(id);
   }
 };

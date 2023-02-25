@@ -1,100 +1,100 @@
 const { User } = require("../models/user");
-const { buscarPorId, listar } = require("../services/user.dao");
+const { searchById, list } = require("../services/user.dao");
 
 exports.signup = async (req, res) => {
-  const objUsuario = new User(req.body);
-  const retornoCadastrar = await objUsuario.cadastrar();
+  const objUser = new User(req.body);
+  const returnRegister = await objUser.register();
 
-  if (retornoCadastrar.codigo_usuario) {
+  if (returnRegister.id) {
     res.status(200).json({
       success: true,
-      message: retornoCadastrar,
+      message: returnRegister,
     });
   } else {
     res.status(500).json({
       success: false,
-      message: retornoCadastrar,
+      message: returnRegister,
     });
   }
 };
 
 exports.signin = async (req, res) => {
-  const objUsuario = new User(req.body);
-  const retornoLogar = await objUsuario.logar();
+  const objUser = new User(req.body);
+  const returnEnter = await objUser.signin();
 
-  if (retornoLogar.codigo_usuario) {
+  if (returnEnter.id) {
     res.status(200).json({
       success: true,
-      message: retornoLogar,
+      message: returnEnter,
     });
   } else {
     res.status(403).json({
       success: false,
-      message: retornoLogar,
+      message: returnEnter,
     });
   }
 };
 
 exports.getUser = async (req, res) => {
-  const retornoBanco = await buscarPorId(req.params.codigo_usuario);
-  if (retornoBanco) {
+  const returnDatabase = await searchById(req.params.id);
+  if (returnDatabase) {
     res.status(200).json({
       success: true,
-      message: retornoBanco,
+      message: returnDatabase,
     });
   } else {
     res.status(404).json({
       success: false,
-      message: retornoBanco,
+      message: returnDatabase,
     });
   }
 };
 
 exports.getAll = async (req, res) => {
-  const retornoBanco = await listar();
-  if (retornoBanco) {
+  const returnDatabase = await list();
+  if (returnDatabase) {
     res.status(200).json({
       success: true,
-      message: retornoBanco,
+      message: returnDatabase,
     });
   } else {
     res.status(404).json({
       success: false,
-      message: retornoBanco,
+      message: returnDatabase,
     });
   }
 };
 
 exports.update = async (req, res) => {
-  const objUsuario = new User(req.body);
-  const retornoAtualizar = await objUsuario.atualizar(req.params);
+  const objUser = new User(req.body);
+  const returnUpdate = await objUser.update(req.params);
 
-  if (retornoAtualizar.codigo_usuario) {
+  if (returnUpdate.id) {
     res.status(200).json({
       success: true,
-      message: retornoAtualizar,
+      message: returnUpdate,
     });
   } else {
     res.status(404).json({
       success: false,
-      message: retornoAtualizar,
+      message: returnUpdate,
     });
   }
 };
 
 exports.remove = async (req, res) => {
-  const objUsuario = new User(req.body);
-  const retornoRemover = await objUsuario.excluir(req.params);
+  const objUser = new User(req.body);
+  const returnRemove = await objUser.delete(req.params);
 
-  if (retornoRemover) {
+  if (returnRemove) {
     res.status(200).json({
       success: true,
-      message: retornoRemover,
+      message: returnRemove,
     });
   } else {
     res.status(404).json({
       success: false,
-      message: retornoRemover,
+      message: returnRemove,
     });
   }
 };

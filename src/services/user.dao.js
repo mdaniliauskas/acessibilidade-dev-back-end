@@ -2,92 +2,92 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-exports.gravar = async (objUsuario) => {
+exports.save = async (objUser) => {
   try {
-    const usuario = await prisma.usuario.create({
-      data: objUsuario
+    const user = await prisma.user.create({
+      data: objUser
     });
-    return usuario;
-  } catch (erro) {
-    console.log(erro);
-    return erro;
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-exports.buscarPorEmail = async (email) => {
+exports.searchByEmail = async (email) => {
   try {
-    const usuario = await prisma.usuario.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
-        email: email
+        email
       }
     });
-    return usuario;
-  } catch (erro) {
-    console.log(erro);
-    return erro;
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-exports.buscarPorId = async (codigo_usuario) => {
+exports.searchById = async (id) => {
   try {
-    const usuario = await prisma.usuario.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
-        codigo_usuario: parseInt(codigo_usuario)
+        id: parseInt(id)
       }
     });
-    return usuario;
-  } catch (erro) {
-    console.log(erro);
-    return erro;
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-exports.listar = async () => {
+exports.list = async () => {
   try {
-    const usuarios = await prisma.usuario.findMany();
-    return usuarios;
-  } catch (erro) {
-    console.log(erro);
-    return erro;
+    const user = await prisma.user.findMany();
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-exports.atualizar = async (codigo_usuario ,objUsuario) => {
+exports.update = async (id, objUser) => {
   try {
-    const usuario = await prisma.usuario.update({
+    const user = await prisma.user.update({
       where: {
-        codigo_usuario: parseInt(codigo_usuario)
+        id: parseInt(id)
       },
-      data: objUsuario
+      data: objUser
     });
-    return usuario;
-  } catch (erro) {
-    console.log(erro);
-    return erro;
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-exports.remover = async (codigo_usuario) => {
+exports.remove = async (id) => {
   try {
-    const usuario = await prisma.usuario.delete({
+    const user = await prisma.user.delete({
       where: {
-        codigo_usuario: parseInt(codigo_usuario)
+        id: parseInt(id)
       }
     });
-    return usuario;
-  } catch (erro) {
-    console.log(erro);
-    return erro;
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
   } finally {
     await prisma.$disconnect();
   }
