@@ -28,8 +28,8 @@ model User {
 model Topic {
   id             Int      @id @default(autoincrement())
   title          String
-  description    String
-  date_published DateTime @db.Date
+  description    String   @db.VarChar(5000)
+  date_published DateTime @default(now())
 
   author   User @relation(fields: [authorId], references: [id])
   authorId Int
