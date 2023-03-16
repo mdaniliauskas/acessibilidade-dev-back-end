@@ -21,4 +21,16 @@ model User {
   specialist_area String?
   disability      String?
   access_control  Int       @default(0)
+
+  topics Topic[]
+}
+
+model Topic {
+  id             Int      @id @default(autoincrement())
+  title          String
+  description    String
+  date_published DateTime @db.Date
+
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
 }
