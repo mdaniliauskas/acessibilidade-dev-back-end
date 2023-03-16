@@ -10,6 +10,8 @@ router.get('/topic', topicController.getAll);
 
 router.get('/topic/:id', topicController.getTopic);
 
+router.post('/topic', topicController.publish);
+
 router.put('/topic/:id', topicController.update);
 
 router.delete('/topic/:id', topicController.remove);

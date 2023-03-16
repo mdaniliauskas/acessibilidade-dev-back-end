@@ -1,6 +1,23 @@
 const { Topic } = require("../models/topic");
 const { searchById, list } = require("../services/topic.dao");
 
+exports.publish = async (req, res) => {
+  const objTopic = new Topic(req.body);
+  const returnCreate = await objTopic.create();
+
+  if (returnCreate.id) {
+    res.status(200).json({
+      success: true,
+      message: returnCreate,
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+      message: returnCreate,
+    });
+  }
+};
+
 exports.getTopic = async (req, res) => {
   const returnDatabase = await searchById(req.params.id);
   if (returnDatabase) {
