@@ -3,9 +3,29 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 exports.save = async (objTopic) => {
+  const { title, description, authorId, categoryId, tags } = objTopic;
   try {
-    const topic = await prisma.topic.create({
-      data: objTopic
+      const topic = await prisma.topic.create({
+      data: {
+        title,
+        description,
+        authorId,
+        categoryId,
+      }
+      });
+    const tagsBD = await prisma.tag.findMany({
+      where: {
+        title: {
+          in: tags
+        }
+      }
+    });
+    const topicTag = await prisma.topicTag.createMany({
+      data: tagsBD.map(tag => ({
+        tagId: tag.id,
+        topicId: topic.id
+      })),
+      skipDuplicates: true
     });
     return topic;
   } catch (error) {

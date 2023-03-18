@@ -5,10 +5,14 @@ exports.Topic = class {
     title,
     description,
     authorId,
+    categoryId,
+    tags
   }) {
     this.title = title;
     this.description = description;
     this.authorId = authorId;
+    this.categoryId = categoryId;
+    this.tags = tags;
   }
 
   async create() {
