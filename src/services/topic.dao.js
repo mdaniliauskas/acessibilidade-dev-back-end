@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 exports.save = async (objTopic) => {
   const { title, description, authorId, categoryId, tags } = objTopic;
   try {
-      const topic = await prisma.topic.create({
+      let topic = await prisma.topic.create({
       data: {
         title,
         description,
@@ -29,6 +29,33 @@ exports.save = async (objTopic) => {
         topicId: topic.id
       })),
       skipDuplicates: true
+    });
+    topic = await prisma.topic.findUnique({
+      where: {
+        id: topic.id
+      },
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true
+          }
+        },
+        category: {
+          select: {
+            title: true
+          }
+        },
+        tags: {
+          include: {
+            tag: {
+              select: {
+                title: true
+              }
+            }
+          }
+        }
+      }
     });
     return topic;
   } catch (error) {
