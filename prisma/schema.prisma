@@ -36,11 +36,29 @@ model Topic {
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
+
+  tags TopicTag[]
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
-  title String
+  title String @unique
 
   topics Topic[]
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  title String @unique
+
+  topics TopicTag[]
+}
+
+model TopicTag {
+  topic   Topic @relation(fields: [topicId], references: [id])
+  topicId Int
+  tag     Tag   @relation(fields: [tagId], references: [id])
+  tagId   Int
+
+  @@id([topicId, tagId])
 }
