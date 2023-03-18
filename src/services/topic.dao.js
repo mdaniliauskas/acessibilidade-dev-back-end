@@ -5,11 +5,7 @@ const prisma = new PrismaClient();
 exports.save = async (objTopic) => {
   try {
     const topic = await prisma.topic.create({
-      data: {
-        title: objTopic.title,
-        description: objTopic.description,
-        authorId: parseInt(objTopic.author),
-      }
+      data: objTopic
     });
     return topic;
   } catch (error) {

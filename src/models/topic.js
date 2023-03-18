@@ -4,11 +4,11 @@ exports.Topic = class {
   constructor({     
     title,
     description,
-    author,
+    authorId,
   }) {
     this.title = title;
     this.description = description;
-    this.author = author;
+    this.authorId = authorId;
   }
 
   async create() {
