@@ -13,6 +13,9 @@ exports.save = async (objTopic) => {
         categoryId,
       }
       });
+    if (!tags) {
+      return topic;
+    }
     const tagsBD = await prisma.tag.findMany({
       where: {
         title: {
@@ -20,7 +23,7 @@ exports.save = async (objTopic) => {
         }
       }
     });
-    const topicTag = await prisma.topicTag.createMany({
+    await prisma.topicTag.createMany({
       data: tagsBD.map(tag => ({
         tagId: tag.id,
         topicId: topic.id
