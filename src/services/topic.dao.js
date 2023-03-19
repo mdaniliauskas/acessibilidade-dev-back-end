@@ -138,7 +138,7 @@ exports.update = async (id, objTopic) => {
     // Remove all tags from topic
     await prisma.topicTag.deleteMany({
       where: {
-        topicId: tagsBD.id
+        topicId: parseInt(id)
       }
     });
 
@@ -161,11 +161,20 @@ exports.update = async (id, objTopic) => {
 
 exports.remove = async (id) => {
   try {
+    // Remove all tags from topic
+    await prisma.topicTag.deleteMany({
+      where: {
+        topicId: parseInt(id)
+      }
+    });
+
+    // Remove topic
     const topic = await prisma.topic.delete({
       where: {
         id: parseInt(id)
       }
     });
+
     return topic;
   } catch (error) {
     console.log(error);
