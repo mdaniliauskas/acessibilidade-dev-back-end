@@ -5,24 +5,35 @@ const prisma = new PrismaClient();
 exports.save = async (objTopic) => {
   const { title, description, authorId, categoryId, tags } = objTopic;
   try {
-      let topic = await prisma.topic.create({
+    // Create a new topic
+    const topic = await prisma.topic.create({
       data: {
         title,
         description,
         authorId,
         categoryId,
       }
-      });
+    });
     if (!tags) {
       return topic;
     }
+
+    // Create tags
+    await prisma.tag.createMany({
+      data: tags.map(tag => ({
+        title: tag.toLowerCase()
+      })),
+      skipDuplicates: true
+    });
     const tagsBD = await prisma.tag.findMany({
       where: {
         title: {
-          in: tags
+          in: tags.map(tag => tag.toLowerCase())
         }
       }
     });
+
+    // ADD tags to topic
     await prisma.topicTag.createMany({
       data: tagsBD.map(tag => ({
         tagId: tag.id,
@@ -30,9 +41,21 @@ exports.save = async (objTopic) => {
       })),
       skipDuplicates: true
     });
-    topic = await prisma.topic.findUnique({
+
+    return topic;
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+exports.searchById = async (id) => {
+  try {
+    const topic = await prisma.topic.findUnique({
       where: {
-        id: topic.id
+        id: parseInt(id)
       },
       include: {
         author: {
@@ -55,22 +78,6 @@ exports.save = async (objTopic) => {
             }
           }
         }
-      }
-    });
-    return topic;
-  } catch (error) {
-    console.log(error);
-    return error;
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-exports.searchById = async (id) => {
-  try {
-    const topic = await prisma.topic.findUnique({
-      where: {
-        id: parseInt(id)
       }
     });
     return topic;
