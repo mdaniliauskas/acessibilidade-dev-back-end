@@ -30,6 +30,7 @@ model Topic {
   title          String
   description    String   @db.VarChar(5000)
   date_published DateTime @default(now())
+  status         Boolean  @default(false)
 
   author   User @relation(fields: [authorId], references: [id])
   authorId Int

@@ -102,7 +102,7 @@ exports.list = async () => {
 }
 
 exports.update = async (id, objTopic) => {
-  const { title, description, authorId, categoryId, tags } = objTopic;
+  const { title, description, status, authorId, categoryId, tags } = objTopic;
   try {
     // Update topic
     const topic = await prisma.topic.update({
@@ -112,6 +112,7 @@ exports.update = async (id, objTopic) => {
       data: {
         title,
         description,
+        status,
         authorId,
         categoryId,
       }
