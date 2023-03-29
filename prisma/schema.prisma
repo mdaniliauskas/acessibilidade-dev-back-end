@@ -23,6 +23,7 @@ model User {
   access_control  Int       @default(0)
 
   topics Topic[]
+  news   News[]
 }
 
 model Topic {
@@ -41,18 +42,37 @@ model Topic {
   tags TopicTag[]
 }
 
+model News {
+  id             Int      @id @default(autoincrement())
+  title          String
+  description    String   @db.VarChar(5000)
+  date_published DateTime @default(now())
+  source         String
+  link           String   @db.VarChar(600)
+
+  User     User @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+
+  tags NewsTag[]
+}
+
 model Category {
   id    Int    @id @default(autoincrement())
   title String @unique
 
   topics Topic[]
+  news   News[]
 }
 
 model Tag {
   id    Int    @id @default(autoincrement())
   title String @unique
 
-  topics TopicTag[]
+  topics  TopicTag[]
+  NewsTag NewsTag[]
 }
 
 model TopicTag {
@@ -62,4 +82,13 @@ model TopicTag {
   tagId   Int
 
   @@id([topicId, tagId])
+}
+
+model NewsTag {
+  news   News @relation(fields: [newsId], references: [id])
+  newsId Int
+  tag    Tag  @relation(fields: [tagId], references: [id])
+  tagId  Int
+
+  @@id([newsId, tagId])
 }
