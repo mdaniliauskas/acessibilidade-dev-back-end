@@ -13,16 +13,4 @@ exports.Text = class {
     this.tags = tags;
   }
 
-  async publishText() { }
-
-  async changeText({ id }) { }
-
-  async consultText({ id }) { }
-
-  async listTexts() { }
-
-  async deleteText({ id }) { }
-
-  async searchSection() { }
-
 };
