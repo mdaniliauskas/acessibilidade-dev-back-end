@@ -50,10 +50,10 @@ model News {
   source         String
   link           String   @db.VarChar(600)
 
-  User     User @relation(fields: [authorId], references: [id])
+  author   User @relation(fields: [authorId], references: [id])
   authorId Int
 
-  Category   Category? @relation(fields: [categoryId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
 
   tags NewsTag[]
