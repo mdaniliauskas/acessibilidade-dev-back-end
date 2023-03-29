@@ -17,7 +17,7 @@ exports.publish = async (req, res) => {
   } else if (returnCreate.code === "P2003") {
     res.status(400).json({
       success: false,
-      message: `Foreign key constraint failed on the field: authorId`,
+      message: `Foreign key constraint failed on the field`,
     });
   } else {
     res.status(500).json({
