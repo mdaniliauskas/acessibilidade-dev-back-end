@@ -1,9 +1,8 @@
 const { Topic } = require("../models/topic");
-const { searchById, list } = require("../services/topic.dao");
 
 exports.publish = async (req, res) => {
   const objTopic = new Topic(req.body);
-  const returnCreate = await objTopic.create();
+  const returnCreate = await objTopic.publishText();
 
   if (returnCreate.id) {
     res.status(201).json({
@@ -29,13 +28,15 @@ exports.publish = async (req, res) => {
 };
 
 exports.getTopic = async (req, res) => {
-  const returnDatabase = await searchById(req.params.id);
-  if (returnDatabase) {
+  const objTopic = new Topic(req.body);
+  const returnConsult = await objTopic.consultText(req.params);
+
+  if (returnConsult) {
     res.status(200).json({
       success: true,
-      message: returnDatabase,
+      message: returnConsult,
     });
-  } else if (returnDatabase === null) {
+  } else if (returnConsult === null) {
     res.status(404).json({
       success: false,
       message: "Topic not found",
@@ -43,29 +44,31 @@ exports.getTopic = async (req, res) => {
   }  else {
     res.status(500).json({
       success: false,
-      message: returnCreate,
+      message: returnConsult,
     });
   }
 };
 
 exports.getAll = async (req, res) => {
-  const returnDatabase = await list();
-  if (returnDatabase) {
+  const objTopic = new Topic(req.body);
+  const returnList = await objTopic.listTexts();
+
+  if (returnList) {
     res.status(200).json({
       success: true,
-      message: returnDatabase,
+      message: returnList,
     });
   } else {
     res.status(500).json({
       success: false,
-      message: returnDatabase,
+      message: returnList,
     });
   }
 };
 
 exports.update = async (req, res) => {
   const objTopic = new Topic(req.body);
-  const returnUpdate = await objTopic.update(req.params);
+  const returnUpdate = await objTopic.changeText(req.params);
 
   if (returnUpdate.id) {
     res.status(200).json({
@@ -90,14 +93,14 @@ exports.update = async (req, res) => {
   } else {
     res.status(500).json({
       success: false,
-      message: returnDatabase,
+      message: returnUpdate,
     });
   }
 };
 
 exports.remove = async (req, res) => {
   const objTopic = new Topic(req.body);
-  const returnRemove = await objTopic.delete(req.params);
+  const returnRemove = await objTopic.deleteText(req.params);
 
   if (returnRemove.id) {
     res.status(200).json({
@@ -112,7 +115,7 @@ exports.remove = async (req, res) => {
   } else {
     res.status(500).json({
       success: false,
-      message: returnDatabase,
+      message: returnRemove,
     });
   }
 };

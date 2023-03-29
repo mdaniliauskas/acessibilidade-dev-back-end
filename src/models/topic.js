@@ -1,7 +1,8 @@
-const { save, update, remove } = require("../services/topic.dao");
+const { Text } = require("./text");
+const { save, list, update, remove, searchById } = require("../services/topic.dao");
 
-exports.Topic = class {
-  constructor({     
+exports.Topic = class extends Text {
+  constructor({
     title,
     description,
     status,
@@ -9,25 +10,31 @@ exports.Topic = class {
     categoryId,
     tags
   }) {
-    this.title = title;
-    this.description = description;
+    super({ title, description, authorId, categoryId, tags });
     this.status = status;
-    this.authorId = authorId;
-    this.categoryId = categoryId;
-    this.tags = tags;
   }
 
-  async create() {
+  async publishText() { 
     return await save(this);
   }
 
-  async update({ id }) {
-    // atualizar os dados
+  async changeText({ id }) { 
     return await update(id, this);
   }
 
-  async delete({ id }) {
-    // excluir o tópico
+  async consultText({ id }) { 
+    return await searchById(id);
+  }
+
+  async listTexts() { 
+    return await list();
+  }
+
+  async deleteText({ id }) { 
     return await remove(id);
+  }
+
+  async replyTopic() { 
+
   }
 };

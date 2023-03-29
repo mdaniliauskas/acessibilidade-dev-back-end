@@ -3,6 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 exports.save = async (objTopic) => {
+  console.log(objTopic);
   const { title, description, authorId, categoryId, tags } = objTopic;
   try {
     // Create a new topic
