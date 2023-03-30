@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 exports.save = async (objNews) => {
-  console.log(objNews);
   const { title, description, source, link, authorId, categoryId, tags } = objNews;
   try {
     // Create a new news
@@ -22,28 +21,10 @@ exports.save = async (objNews) => {
     }
 
     // Create tags and search for existing tags
-    await prisma.tag.createMany({
-      data: tags.map(tag => ({
-        title: tag.toLowerCase()
-      })),
-      skipDuplicates: true
-    });
-    const tagsBD = await prisma.tag.findMany({
-      where: {
-        title: {
-          in: tags.map(tag => tag.toLowerCase())
-        }
-      }
-    });
+    const tagsBD = await createAndSearchTags(tags);
 
     // ADD tags to news
-    await prisma.newsTag.createMany({
-      data: tagsBD.map(tag => ({
-        tagId: tag.id,
-        newsId: news.id
-      })),
-      skipDuplicates: true
-    });
+    await addTagsToNews(tagsBD, news);
 
     return news;
   } catch (error) {
@@ -126,35 +107,14 @@ exports.update = async (id, objNews) => {
     }
 
     // Create tags and search for existing tags
-    await prisma.tag.createMany({
-      data: tags.map(tag => ({
-        title: tag.toLowerCase()
-      })),
-      skipDuplicates: true
-    });
-    const tagsBD = await prisma.tag.findMany({
-      where: {
-        title: {
-          in: tags.map(tag => tag.toLowerCase())
-        }
-      }
-    });
+    const tagsBD = await createAndSearchTags(tags);
 
     // Remove all tags from news
-    await prisma.newsTag.deleteMany({
-      where: {
-        newsId: parseInt(id)
-      }
-    });
+    await removeAllTagsFromNews(id);
 
     // ADD tags to news
-    await prisma.newsTag.createMany({
-      data: tagsBD.map(tag => ({
-        tagId: tag.id,
-        newsId: news.id
-      })),
-      skipDuplicates: true
-    });
+    await addTagsToNews(tagsBD, news);
+
     return news;
   } catch (error) {
     console.log(error);
@@ -167,11 +127,7 @@ exports.update = async (id, objNews) => {
 exports.remove = async (id) => {
   try {
     // Remove all tags from news
-    await prisma.newsTag.deleteMany({
-      where: {
-        newsId: parseInt(id)
-      }
-    });
+    await removeAllTagsFromNews(id);
 
     // Remove news
     const news = await prisma.news.delete({
@@ -187,4 +143,38 @@ exports.remove = async (id) => {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+const createAndSearchTags =  async (tags) => {
+  await prisma.tag.createMany({
+    data: tags.map(tag => ({
+      title: tag.toLowerCase()
+    })),
+    skipDuplicates: true
+  });
+  return await prisma.tag.findMany({
+    where: {
+      title: {
+        in: tags.map(tag => tag.toLowerCase())
+      }
+    }
+  });
+}
+
+const addTagsToNews =  async (tagsBD, news) => {
+  await prisma.newsTag.createMany({
+    data: tagsBD.map(tag => ({
+      tagId: tag.id,
+      newsId: news.id
+    })),
+    skipDuplicates: true
+  });
+}
+
+const removeAllTagsFromNews = async (id) => {
+  await prisma.newsTag.deleteMany({
+    where: {
+      newsId: parseInt(id)
+    }
+  });
 }
