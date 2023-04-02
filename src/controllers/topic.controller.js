@@ -1,25 +1,30 @@
 const { Topic } = require("../models/topic");
 const { responseError } = require("../controllers/responseError");
+const { Prisma } = require('@prisma/client');
 
 exports.publish = async (req, res) => {
   const objTopic = new Topic(req.body);
   const returnCreate = await objTopic.publishText();
+
   if (returnCreate.id) {
     return res.status(201).json({
       success: true,
       message: returnCreate,
     });
   }
-    
-  try {
-    responseError[returnCreate.code](res)
+  if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
   }
-  catch (error) {
-    res.status(400).json({
+  if (returnCreate instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
       success: false,
       message: "Incorrect field type provided in the JSON input",
     });
   }
+  responseError[returnCreate.code](res)
 };
 
 exports.getTopic = async (req, res) => {
@@ -36,7 +41,18 @@ exports.getTopic = async (req, res) => {
     success: true,
     message: returnConsult,
   });
-  
+    if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  if (returnCreate instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
+      success: false,
+      message: "Incorrect field type provided in the JSON input",
+    });
+  }
 };
 
 exports.getAll = async (req, res) => {
@@ -47,6 +63,18 @@ exports.getAll = async (req, res) => {
     success: true,
     message: returnList,
   });
+  if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  if (returnCreate instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
+      success: false,
+      message: "Incorrect field type provided in the JSON input",
+    });
+  }
 };
 
 exports.update = async (req, res) => {
@@ -59,16 +87,19 @@ exports.update = async (req, res) => {
       message: returnUpdate,
     });
   } 
-
-  try {
-    responseError[returnUpdate.code](res)
+  if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
   }
-  catch (error) {
-    res.status(400).json({
+  if (returnCreate instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
       success: false,
       message: "Incorrect field type provided in the JSON input",
     });
   }
+  responseError[returnUpdate.code](res)
 };
 
 exports.remove = async (req, res) => {
@@ -81,13 +112,17 @@ exports.remove = async (req, res) => {
       message: returnRemove,
     });
   } 
-  try {
-    responseError[returnRemove.code](res)
+  if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
   }
-  catch (error) {
-    res.status(400).json({
+  if (returnCreate instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
       success: false,
       message: "Incorrect field type provided in the JSON input",
     });
   }
+  responseError[returnRemove.code](res)
 };
