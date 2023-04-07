@@ -22,8 +22,9 @@ model User {
   disability      String?
   access_control  Int       @default(0)
 
-  topics Topic[]
-  news   News[]
+  topics  Topic[]
+  replies Reply[]
+  news    News[]
 }
 
 model Topic {
@@ -39,7 +40,20 @@ model Topic {
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
 
-  tags TopicTag[]
+  tags    TopicTag[]
+  replies Reply[]
+}
+
+model Reply {
+  id             Int      @id @default(autoincrement())
+  description    String   @db.VarChar(5000)
+  date_published DateTime @default(now())
+
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  topic   Topic @relation(fields: [topicId], references: [id])
+  topicId Int
 }
 
 model News {

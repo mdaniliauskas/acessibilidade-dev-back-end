@@ -1,17 +1,17 @@
-const { Topic } = require("../models/topic");
-const { responseError } = require("../controllers/responseError");
+const { Reply } = require("../models/reply");
+const { responseError } = require("./responseError");
 const { Prisma } = require('@prisma/client');
 
 exports.publish = async (req, res) => {
-  const objTopic = new Topic(req.body);
-  const returnCreate = await objTopic.publishText();
+  const objReply = new Reply(req.body);
+  const returnCreate = await objReply.publishText();
 
   if (returnCreate.id) {
     return res.status(201).json({
       success: true,
       message: returnCreate,
     });
-  }
+  } 
   if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
@@ -24,24 +24,24 @@ exports.publish = async (req, res) => {
       message: "Incorrect field type provided in the JSON input",
     });
   }
-  responseError[returnCreate.code](res)
+  responseError[returnCreate.code](res);
 };
 
-exports.getTopic = async (req, res) => {
-  const objTopic = new Topic(req.body);
-  const returnConsult = await objTopic.consultText(req.params);
+exports.getReply = async (req, res) => {
+  const objReply = new Reply(req.body);
+  const returnConsult = await objReply.consultText(req.params);
 
   if (returnConsult === null) {
     return res.status(404).json({
       success: false,
-      message: "Topic not found",
+      message: "Reply not found",
     });
   }
   res.status(200).json({
     success: true,
     message: returnConsult,
   });
-    if (returnConsult instanceof Prisma.PrismaClientInitializationError) {
+  if (returnConsult instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
       message: "Internal server error, please restart the server",
@@ -56,8 +56,8 @@ exports.getTopic = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
-  const objTopic = new Topic(req.body);
-  const returnList = await objTopic.listTexts();
+  const objReply = new Reply(req.body);
+  const returnList = await objReply.listTexts();
 
   res.status(200).json({
     success: true,
@@ -78,8 +78,8 @@ exports.getAll = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const objTopic = new Topic(req.body);
-  const returnUpdate = await objTopic.changeText(req.params);
+  const objReply = new Reply(req.body);
+  const returnUpdate = await objReply.changeText(req.params);
 
   if (returnUpdate.id) {
     return res.status(200).json({
@@ -103,8 +103,8 @@ exports.update = async (req, res) => {
 };
 
 exports.remove = async (req, res) => {
-  const objTopic = new Topic(req.body);
-  const returnRemove = await objTopic.deleteText(req.params);
+  const objReply = new Reply(req.body);
+  const returnRemove = await objReply.deleteText(req.params);
 
   if (returnRemove.id) {
     return res.status(200).json({
@@ -124,5 +124,5 @@ exports.remove = async (req, res) => {
       message: "Incorrect field type provided in the JSON input",
     });
   }
-  responseError[returnRemove.code](res)
+  responseError[returnRemove.code](res);
 };
