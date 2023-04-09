@@ -4,40 +4,9 @@ const prisma = new PrismaClient();
 
 exports.preSave = async (objUser) => {
   try {
-    const user = await prisma.auth.create({
+    return await prisma.user.create({
       data: objUser,
     });
-    return user;
-  } catch (error) {
-    console.log(error);
-    return error;
-  } finally {
-    await prisma.$disconnect();
-  }
-};
-
-exports.save = async (objUser) => {
-  try {
-    const user = await prisma.user.create({
-      data: objUser,
-    });
-    return user;
-  } catch (error) {
-    console.log(error);
-    return error;
-  } finally {
-    await prisma.$disconnect();
-  }
-};
-
-exports.searchByEmail = async (email) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    return user;
   } catch (error) {
     console.log(error);
     return error;
@@ -48,12 +17,11 @@ exports.searchByEmail = async (email) => {
 
 exports.searchById = async (id) => {
   try {
-    const user = await prisma.auth.findUnique({
+    return await prisma.user.findUnique({
       where: {
-        id: id,
+        id
       },
     });
-    return user;
   } catch (error) {
     console.log(error);
     return error;
@@ -64,8 +32,7 @@ exports.searchById = async (id) => {
 
 exports.list = async () => {
   try {
-    const user = await prisma.user.findMany();
-    return user;
+    return await prisma.user.findMany();
   } catch (error) {
     console.log(error);
     return error;
@@ -74,15 +41,14 @@ exports.list = async () => {
   }
 };
 
-exports.update = async (id, objUser) => {
+exports.update = async (objUser) => {
   try {
-    const user = await prisma.user.update({
+    return await prisma.user.update({
       where: {
-        id: parseInt(id),
+        id: objUser.id,
       },
       data: objUser,
     });
-    return user;
   } catch (error) {
     console.log(error);
     return error;
@@ -93,12 +59,11 @@ exports.update = async (id, objUser) => {
 
 exports.remove = async (id) => {
   try {
-    const user = await prisma.user.delete({
+    return await prisma.user.delete({
       where: {
-        id: parseInt(id),
+        id,
       },
     });
-    return user;
   } catch (error) {
     console.log(error);
     return error;

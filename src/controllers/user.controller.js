@@ -1,117 +1,91 @@
 const { User } = require("../models/user");
-const { searchById, list } = require("../services/user.dao");
+const { responseError } = require("../helpers/responseError");
+const { Prisma } = require('@prisma/client');
 
 exports.preSignup = async (req, res) => {
   const objUser = new User(req.body);
   const returnRegister = await objUser.preRegister();
 
   if (returnRegister.id) {
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: returnRegister,
     });
-  } else {
-    res.json({
+  } 
+  if (returnRegister instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
       success: false,
-      message: returnRegister,
+      message: "Internal server error, please restart the server",
     });
   }
-};
-
-exports.signup = async (req, res) => {
-  const objUser = new User(req.body);
-  const returnRegister = await objUser.register();
-
-  if (returnRegister.id) {
-    res.status(200).json({
-      success: true,
-      message: returnRegister,
-    });
-  } else {
-    res.status(500).json({
+  if (returnRegister instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
       success: false,
-      message: returnRegister,
+      message: "Incorrect field type provided in the JSON input",
     });
   }
-};
-
-exports.signin = async (req, res) => {
-  const objUser = new User(req.body);
-  const returnEnter = await objUser.signin();
-
-  if (returnEnter.id) {
-    res.status(200).json({
-      success: true,
-      message: returnEnter,
-    });
-  } else {
-    res.status(403).json({
-      success: false,
-      message: returnEnter,
-    });
-  }
+  responseError[returnRegister.code](res);
 };
 
 exports.getUser = async (req, res) => {
-  const returnDatabase = await searchById(req.params.id);
-  if (returnDatabase) {
-    res.status(200).json({
-      success: true,
-      message: returnDatabase,
-    });
-  } else {
-    res.json({
+  const objUser = new User(req.params.id);
+  const returnConsult = await objUser.consultUser();
+  if (returnConsult === null) {
+    return res.status(404).json({
       success: false,
-      message: returnDatabase,
+      message: "User not found",
     });
   }
-};
-
-exports.getAll = async (req, res) => {
-  const returnDatabase = await list();
-  if (returnDatabase) {
-    res.status(200).json({
-      success: true,
-      message: returnDatabase,
-    });
-  } else {
-    res.status(404).json({
+  if (returnConsult instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
       success: false,
-      message: returnDatabase,
+      message: "Internal server error, please restart the server",
     });
   }
+  res.status(200).json({
+    success: true,
+    message: returnConsult,
+  });
 };
 
 exports.update = async (req, res) => {
   const objUser = new User(req.body);
-  const returnUpdate = await objUser.update(req.params);
-
+  const returnUpdate = await objUser.update();
   if (returnUpdate.id) {
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: returnUpdate,
     });
-  } else {
-    res.status(404).json({
+  } 
+  if (returnUpdate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
       success: false,
-      message: returnUpdate,
+      message: "Internal server error, please restart the server",
     });
   }
+  if (returnUpdate instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
+      success: false,
+      message: "Incorrect field type provided in the JSON input",
+    });
+  }
+  responseError[returnUpdate.code](res)
 };
 
 exports.remove = async (req, res) => {
-  const objUser = new User(req.body);
-  const returnRemove = await objUser.delete(req.params);
-
-  if (returnRemove) {
-    res.status(200).json({
+  const objUser = new User(req.params.id);
+  const returnRemove = await objUser.delete();
+  if (returnRemove.id) {
+    return res.status(200).json({
       success: true,
       message: returnRemove,
     });
-  } else {
-    res.status(404).json({
+  } 
+  if (returnRemove instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
       success: false,
-      message: returnRemove,
+      message: "Internal server error, please restart the server",
     });
   }
+  responseError[returnRemove.code](res);
 };

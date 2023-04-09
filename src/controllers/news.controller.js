@@ -1,5 +1,5 @@
 const { News } = require("../models/news");
-const { responseError } = require("../controllers/responseError");
+const { responseError } = require("../helpers/responseError");
 const { Prisma } = require('@prisma/client');
 
 exports.publish = async (req, res) => {
@@ -24,7 +24,6 @@ exports.publish = async (req, res) => {
       message: "Incorrect field type provided in the JSON input",
     });
   }
-  responseError[returnCreate.code](res);
 };
 
 exports.getNews = async (req, res) => {
@@ -37,44 +36,31 @@ exports.getNews = async (req, res) => {
       message: "News not found",
     });
   }
-  res.status(200).json({
-    success: true,
-    message: returnConsult,
-  });
   if (returnConsult instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
       message: "Internal server error, please restart the server",
     });
   }
-  if (returnConsult instanceof Prisma.PrismaClientValidationError) { 
-    return res.status(400).json({
-      success: false,
-      message: "Incorrect field type provided in the JSON input",
-    });
-  }
+  res.status(200).json({
+    success: true,
+    message: returnConsult,
+  });
 };
 
 exports.getAll = async (req, res) => {
   const objNews = new News(req.body);
   const returnList = await objNews.listTexts();
-
-  res.status(200).json({
-    success: true,
-    message: returnList,
-  });
   if (returnList instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
       message: "Internal server error, please restart the server",
     });
   }
-  if (returnList instanceof Prisma.PrismaClientValidationError) { 
-    return res.status(400).json({
-      success: false,
-      message: "Incorrect field type provided in the JSON input",
-    });
-  }
+  res.status(200).json({
+    success: true,
+    message: returnList,
+  });
 };
 
 exports.update = async (req, res) => {
@@ -105,7 +91,6 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   const objNews = new News(req.body);
   const returnRemove = await objNews.deleteText(req.params);
-
   if (returnRemove.id) {
     return res.status(200).json({
       success: true,
@@ -118,11 +103,4 @@ exports.remove = async (req, res) => {
       message: "Internal server error, please restart the server",
     });
   }
-  if (returnRemove instanceof Prisma.PrismaClientValidationError) { 
-    return res.status(400).json({
-      success: false,
-      message: "Incorrect field type provided in the JSON input",
-    });
-  }
-  responseError[returnRemove.code](res);
 };

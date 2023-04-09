@@ -12,15 +12,15 @@ datasource db {
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  first_name      String
-  last_name       String
-  birth_date      DateTime? @db.Date
-  email           String    @unique
-  password        String
-  specialist_area String?
-  disability      String?
-  access_control  Int       @default(0)
+  id               String    @id
+  first_name       String?
+  last_name        String?
+  birth_date       DateTime? @db.Date
+  email            String    @unique
+  specialist_area  String?
+  disability       String?
+  access_control   Int       @default(0)
+  completedProfile Boolean   @default(false)
 
   topics  Topic[]
   replies Reply[]
@@ -34,8 +34,8 @@ model Topic {
   date_published DateTime @default(now())
   status         Boolean  @default(false)
 
-  author   User @relation(fields: [authorId], references: [id])
-  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
@@ -49,8 +49,8 @@ model Reply {
   description    String   @db.VarChar(5000)
   date_published DateTime @default(now())
 
-  author   User @relation(fields: [authorId], references: [id])
-  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
 
   topic   Topic @relation(fields: [topicId], references: [id])
   topicId Int
@@ -64,8 +64,8 @@ model News {
   source         String
   link           String   @db.VarChar(600)
 
-  author   User @relation(fields: [authorId], references: [id])
-  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
@@ -103,16 +103,4 @@ model NewsTag {
   newsId Int
   tag    Tag? @relation(fields: [tagId], references: [id])
   tagId  Int?
-}
-
-model Auth {
-  id              String       @id
-  first_name      String?
-  last_name       String?
-  birth_date      DateTime? @db.Date
-  email           String    @unique
-  specialist_area String?
-  disability      String?
-  access_control  Int       @default(0)
-  completedProfile Boolean @default(false)
 }
