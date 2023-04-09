@@ -7,6 +7,7 @@ exports.preSave = async (objUser) => {
     const user = await prisma.auth.create({
       data: objUser,
     });
+    return user;
   } catch (error) {
     console.log(error);
     return error;
