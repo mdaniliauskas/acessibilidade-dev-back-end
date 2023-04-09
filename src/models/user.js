@@ -33,7 +33,7 @@ exports.User = class {
   }
 
   async preRegister() {
-    return await preSave({ id: this.id, email: this.email });
+    return await preSave(this);
   }
 
   async register() {
