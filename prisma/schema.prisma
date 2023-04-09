@@ -104,3 +104,15 @@ model NewsTag {
   tag    Tag? @relation(fields: [tagId], references: [id])
   tagId  Int?
 }
+
+model Auth {
+  id              String       @id
+  first_name      String
+  last_name       String
+  birth_date      DateTime? @db.Date
+  email           String    @unique
+  specialist_area String?
+  disability      String?
+  access_control  Int       @default(0)
+  completedProfile Boolean @default(false)
+}
