@@ -60,7 +60,7 @@ exports.getUser = async (req, res) => {
       message: returnDatabase,
     });
   } else {
-    res.status(404).json({
+    res.status.json({
       success: false,
       message: returnDatabase,
     });
