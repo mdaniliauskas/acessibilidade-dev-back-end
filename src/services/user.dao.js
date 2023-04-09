@@ -47,9 +47,9 @@ exports.searchByEmail = async (email) => {
 
 exports.searchById = async (id) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.auth.findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
       },
     });
     return user;

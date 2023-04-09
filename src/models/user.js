@@ -18,7 +18,7 @@ exports.User = class {
     disability,
     access_control,
   }) {
-    this.user_id = user_id;
+    this.id = id;
     this.first_name = first_name;
     this.last_name = last_name;
     this.birth_date = birth_date;
@@ -30,7 +30,7 @@ exports.User = class {
   }
 
   async preRegister() {
-    return await preSave({ user_id: this.user_id, email: this.email });
+    return await preSave({ id: this.id, email: this.email });
   }
 
   async register() {
