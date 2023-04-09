@@ -11,7 +11,7 @@ exports.preSignup = async (req, res) => {
       message: returnRegister,
     });
   } else {
-    res.status(500).json({
+    res.json({
       success: false,
       message: returnRegister,
     });
