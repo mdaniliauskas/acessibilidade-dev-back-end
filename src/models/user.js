@@ -1,17 +1,24 @@
-const { save, searchByEmail, update, remove } = require("../services/user.dao");
+const {
+  save,
+  preSave,
+  searchByEmail,
+  update,
+  remove,
+} = require("../services/user.dao");
 const bcrypt = require("bcrypt");
 
 exports.User = class {
-  constructor({     
-  first_name,
-  last_name,
-  birth_date,
-  email,
-  password,
-  specialist_area,
-  disability,   
-  access_control,
+  constructor({
+    user_id,
+    first_name,
+    last_name,
+    birth_date,
+    password,
+    specialist_area,
+    disability,
+    access_control,
   }) {
+    this.user_id = user_id;
     this.first_name = first_name;
     this.last_name = last_name;
     this.birth_date = birth_date;
@@ -20,6 +27,10 @@ exports.User = class {
     this.specialist_area = specialist_area;
     this.disability = disability;
     this.access_control = access_control;
+  }
+
+  async preRegister() {
+    return await preSave({ user_id: this.user_id, email: this.email });
   }
 
   async register() {

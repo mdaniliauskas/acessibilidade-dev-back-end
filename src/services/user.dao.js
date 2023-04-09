@@ -1,11 +1,24 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
+
+exports.preSave = async (objUser) => {
+  try {
+    const user = await prisma.auth.create({
+      data: objUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 
 exports.save = async (objUser) => {
   try {
     const user = await prisma.user.create({
-      data: objUser
+      data: objUser,
     });
     return user;
   } catch (error) {
@@ -14,14 +27,14 @@ exports.save = async (objUser) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 exports.searchByEmail = async (email) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        email
-      }
+        email,
+      },
     });
     return user;
   } catch (error) {
@@ -30,14 +43,14 @@ exports.searchByEmail = async (email) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 exports.searchById = async (id) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(id)
-      }
+        id: parseInt(id),
+      },
     });
     return user;
   } catch (error) {
@@ -46,7 +59,7 @@ exports.searchById = async (id) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 exports.list = async () => {
   try {
@@ -58,15 +71,15 @@ exports.list = async () => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 exports.update = async (id, objUser) => {
   try {
     const user = await prisma.user.update({
       where: {
-        id: parseInt(id)
+        id: parseInt(id),
       },
-      data: objUser
+      data: objUser,
     });
     return user;
   } catch (error) {
@@ -75,14 +88,14 @@ exports.update = async (id, objUser) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 exports.remove = async (id) => {
   try {
     const user = await prisma.user.delete({
       where: {
-        id: parseInt(id)
-      }
+        id: parseInt(id),
+      },
     });
     return user;
   } catch (error) {
@@ -91,4 +104,4 @@ exports.remove = async (id) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};

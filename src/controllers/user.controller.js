@@ -1,6 +1,23 @@
 const { User } = require("../models/user");
 const { searchById, list } = require("../services/user.dao");
 
+exports.preSignup = async (req, res) => {
+  const objUser = new User(req.body);
+  const returnRegister = await objUser.preRegister();
+
+  if (returnRegister.id) {
+    res.status(200).json({
+      success: true,
+      message: returnRegister,
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+      message: returnRegister,
+    });
+  }
+};
+
 exports.signup = async (req, res) => {
   const objUser = new User(req.body);
   const returnRegister = await objUser.register();
