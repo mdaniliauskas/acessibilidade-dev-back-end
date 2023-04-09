@@ -9,14 +9,16 @@ const bcrypt = require("bcrypt");
 
 exports.User = class {
   constructor({
-    user_id,
+    id,
     first_name,
     last_name,
     birth_date,
     password,
+    email,
     specialist_area,
     disability,
     access_control,
+    completedProfile,
   }) {
     this.id = id;
     this.first_name = first_name;
@@ -27,6 +29,7 @@ exports.User = class {
     this.specialist_area = specialist_area;
     this.disability = disability;
     this.access_control = access_control;
+    this.completedProfile = completedProfile;
   }
 
   async preRegister() {
