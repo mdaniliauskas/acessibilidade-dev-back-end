@@ -10,7 +10,7 @@ router.post("/user/pre-signup", userController.preSignup);
 
 router.get("/user/:id", userController.getUser);
 
-router.put("/user/:id", userController.update);
+router.put("/user", userController.update);
 
 router.delete("/user/:id", userController.remove);
 

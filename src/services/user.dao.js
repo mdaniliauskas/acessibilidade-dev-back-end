@@ -19,7 +19,7 @@ exports.searchById = async (id) => {
   try {
     return await prisma.user.findUnique({
       where: {
-        id
+        id: id
       },
     });
   } catch (error) {
@@ -61,7 +61,7 @@ exports.remove = async (id) => {
   try {
     return await prisma.user.delete({
       where: {
-        id,
+        id: id
       },
     });
   } catch (error) {

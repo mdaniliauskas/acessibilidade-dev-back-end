@@ -28,7 +28,7 @@ exports.preSignup = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-  const objUser = new User(req.params.id);
+  const objUser = new User(req.params);
   const returnConsult = await objUser.consultUser();
   if (returnConsult === null) {
     return res.status(404).json({
@@ -73,7 +73,7 @@ exports.update = async (req, res) => {
 };
 
 exports.remove = async (req, res) => {
-  const objUser = new User(req.params.id);
+  const objUser = new User(req.params);
   const returnRemove = await objUser.delete();
   if (returnRemove.id) {
     return res.status(200).json({
