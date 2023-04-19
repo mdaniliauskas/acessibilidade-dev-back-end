@@ -27,7 +27,14 @@ exports.Topic = class extends Text {
   }
 
   async listTexts() { 
-    return await list();
+    let returnList = await list();
+    returnList = returnList.map((topic) => {
+      return {
+        ...topic,
+        replies: topic.replies.length
+      }
+    })
+    return returnList;
   }
 
   async deleteText({ id }) { 

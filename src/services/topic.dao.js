@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, sql } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -35,7 +35,7 @@ exports.save = async (objTopic) => {
 
 exports.searchById = async (id) => {
   try {
-    const topic = await prisma.topic.findUnique({
+    return await prisma.topic.findUnique({
       where: {
         id: parseInt(id)
       },
@@ -52,17 +52,28 @@ exports.searchById = async (id) => {
           }
         },
         tags: {
-          include: {
+          select: {
             tag: {
               select: {
                 title: true
               }
             }
           }
+        },
+        replies: {
+          select: {
+            description: true,
+            date_published: true,
+            author: {
+              select: {
+                first_name: true,
+                last_name: true
+              }
+            }
+          }
         }
       }
     });
-    return topic;
   } catch (error) {
     console.log(error);
     return error;
@@ -73,8 +84,22 @@ exports.searchById = async (id) => {
 
 exports.list = async () => {
   try {
-    const topic = await prisma.topic.findMany();
-    return topic;
+    return await prisma.topic.findMany({
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true,
+            specialist_area: true
+          }
+        },
+        replies: {
+          select: {
+            id: true
+          }
+        }
+      },
+    });
   } catch (error) {
     console.log(error);
     return error;
