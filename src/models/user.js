@@ -1,4 +1,4 @@
-const { preSave, searchById, list, update, remove } = require("../services/user.dao");
+const { preSave, searchById, searchByEmail, update, remove } = require("../services/user.dao");
 
 exports.User = class {
   constructor({
@@ -29,6 +29,10 @@ exports.User = class {
 
   async consultUser() { 
     return await searchById(this.id);
+  }
+
+  async consultUserByEmail() {
+    return await searchByEmail(this.email);
   }
 
   async update() {

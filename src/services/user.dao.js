@@ -30,9 +30,13 @@ exports.searchById = async (id) => {
   }
 };
 
-exports.list = async () => {
+exports.searchByEmail = async (email) => {
   try {
-    return await prisma.user.findMany();
+    return await prisma.user.findUnique({
+      where: {
+        email
+      },
+    });
   } catch (error) {
     console.log(error);
     return error;

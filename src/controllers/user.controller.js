@@ -48,6 +48,27 @@ exports.getUser = async (req, res) => {
   });
 };
 
+exports.getUserByEmail = async (req, res) => {
+  const objUser = new User(req.params);
+  const returnConsult = await objUser.consultUserByEmail();
+  if (returnConsult === null) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+  if (returnConsult instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: returnConsult,
+  });
+};
+
 exports.update = async (req, res) => {
   const objUser = new User(req.body);
   const returnUpdate = await objUser.update();
