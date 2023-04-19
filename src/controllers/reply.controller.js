@@ -1,8 +1,35 @@
 const { Reply } = require("../models/reply");
+const { Topic } = require("../models/topic");
 const { responseError } = require("../helpers/responseError");
 const { Prisma } = require('@prisma/client');
 
 exports.publish = async (req, res) => {
+  const objTopic = new Topic(req.body);
+  const returnConsult = await objTopic.consultText({ id:req.body.topicId });
+  if (returnConsult instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  if (returnConsult instanceof Prisma.PrismaClientValidationError) { 
+    return res.status(400).json({
+      success: false,
+      message: "Incorrect field type provided in the JSON input",
+    });
+  }
+    if (returnConsult === null) {
+    return res.status(404).json({
+      success: false,
+      message: "Topic not found",
+    });
+  }
+  if (returnConsult.status === true) {
+    return res.status(400).json({
+      success: false,
+      message: "Topic is closed",
+    });
+  }
   const objReply = new Reply(req.body);
   const returnCreate = await objReply.publishText();
   if (returnCreate.id) {
