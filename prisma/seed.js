@@ -103,8 +103,10 @@ async function main() {
     },
   })
 
-  const topic1 = await prisma.topic.create({
-    data: {
+  const topic1 = await prisma.topic.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
       title: 'Check out Prisma with Next.js',
       description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
       categoryId: category1.id,
@@ -127,8 +129,10 @@ async function main() {
     }
   })
 
-  const topic2 = await prisma.topic.create({
-    data: {
+  const topic2 = await prisma.topic.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
       title: 'Check out Prisma with Next.js',
       description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
       categoryId: category2.id,
@@ -151,8 +155,10 @@ async function main() {
     }
   })
 
-  const news1 = await prisma.news.create({
-    data: {
+  const news1 = await prisma.news.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
       title: 'Check out Prisma with Next.js',
       description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
       source: "google",
@@ -177,8 +183,10 @@ async function main() {
     }
   })
 
-  const news2 = await prisma.news.create({
-    data: {
+  const news2 = await prisma.news.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
       title: 'Check out Prisma with Next.js',
       description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
       source: "google",
@@ -203,19 +211,79 @@ async function main() {
     }
   })
 
-  const reply1 = await prisma.reply.create({
-    data: {
+  const reply1 = await prisma.reply.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
       description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
       authorId: user2.id,
       topicId: topic1.id,
     }
   })
 
-  const reply2 = await prisma.reply.create({
-    data: {
+  const reply2 = await prisma.reply.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
       description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
       authorId: user1.id,
       topicId: topic2.id,
+    }
+  })
+
+  const tool1 = await prisma.tool.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      title: 'Check out Prisma with Next.js',
+      description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
+      organization: "google",
+      link: "https://www.google.com",
+      categoryId: category3.id,
+      authorId: user1.id,
+      tags: {
+        createMany: {
+          data: [
+            {
+              tagId: tag1.id,
+            },
+            {
+              tagId: tag2.id,
+            },
+            {
+              tagId: tag3.id,
+            },
+          ]
+        }
+      }
+    }
+  })
+
+  const tool2 = await prisma.tool.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      title: 'Check out Prisma with Next.js',
+      description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
+      organization: "google",
+      link: "https://www.google.com",
+      categoryId: category1.id,
+      authorId: user2.id,
+      tags: {
+        createMany: {
+          data: [
+            {
+              tagId: tag4.id,
+            },
+            {
+              tagId: tag5.id,
+            },
+            {
+              tagId: tag6.id,
+            },
+          ]
+        }
+      }
     }
   })
 
@@ -225,6 +293,7 @@ async function main() {
   console.log({ Topics: { topic1, topic2 } })
   console.log({ News: { news1, news2 } })
   console.log({ Replies: { reply1, reply2 } })
+  console.log({ Tools: { tool1, tool2 } })
 }
 main()
   .then(async () => {
