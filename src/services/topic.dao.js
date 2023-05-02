@@ -6,25 +6,28 @@ exports.save = async (objTopic) => {
   const { title, description, authorId, categoryId, tags } = objTopic;
   try {
     // Create a new topic
-    const topic = await prisma.topic.create({
+    return await prisma.topic.create({
       data: {
         title,
         description,
         authorId,
         categoryId,
+        tags: {
+          create: tags.map(tag => ({
+            tag: {
+              connectOrCreate: {
+                where: {
+                  title: tag.toLowerCase()
+                },
+                create: {
+                  title: tag.toLowerCase()
+                }
+              }
+            }
+          }))
+        }
       }
     });
-    if (!tags) {
-      return topic;
-    }
-
-    // Create tags and search for existing tags
-    const tagsBD = await createAndSearchTags(tags);
-
-    // ADD tags to topic
-    await addTagsToTopic(tagsBD, topic);
-
-    return topic;
   } catch (error) {
     console.log(error);
     return error;
@@ -111,8 +114,25 @@ exports.list = async () => {
 exports.update = async (id, objTopic) => {
   const { title, description, status, authorId, categoryId, tags } = objTopic;
   try {
-    // Update topic
-    const topic = await prisma.topic.update({
+    if (!tags) {
+      // Update topic without tags
+      return await prisma.topic.update({
+        where: {
+          id: parseInt(id)
+        },
+        data: {
+          title,
+          description,
+          status,
+          authorId,
+          categoryId,
+        }
+      });
+    }
+    // Remove all tags from topic
+    await removeAllTagsFromTopic(id)
+    // Update topic with tags
+    return await prisma.topic.update({
       where: {
         id: parseInt(id)
       },
@@ -122,22 +142,22 @@ exports.update = async (id, objTopic) => {
         status,
         authorId,
         categoryId,
+        tags: {
+          create: tags.map(tag => ({
+            tag: {
+              connectOrCreate: {
+                where: {
+                  title: tag.toLowerCase()
+                },
+                create: {
+                  title: tag.toLowerCase()
+                }
+              }
+            }
+          }))
+        }
       }
     });
-    if (!tags) {
-      return topic;
-    }
-
-    // Create tags and search for existing tags
-    const tagsBD = await createAndSearchTags(tags);
-
-    // Remove all tags from topic
-    await removeAllTagsFromTopic(id)
-
-    // ADD tags to topic
-    await addTagsToTopic(tagsBD, topic);
-
-    return topic;
   } catch (error) {
     console.log(error);
     return error;
@@ -152,45 +172,17 @@ exports.remove = async (id) => {
     await removeAllTagsFromTopic(id)
 
     // Remove topic
-    const topic = await prisma.topic.delete({
+    return await prisma.topic.delete({
       where: {
         id: parseInt(id)
       }
     });
-
-    return topic;
   } catch (error) {
     console.log(error);
     return error;
   } finally {
     await prisma.$disconnect();
   }
-}
-
-const createAndSearchTags =  async (tags) => {
-  await prisma.tag.createMany({
-    data: tags.map(tag => ({
-      title: tag.toLowerCase()
-    })),
-    skipDuplicates: true
-  });
-  return await prisma.tag.findMany({
-    where: {
-      title: {
-        in: tags.map(tag => tag.toLowerCase())
-      }
-    }
-  });
-}
-
-const addTagsToTopic =  async (tagsBD, topic) => {
-  await prisma.topicTag.createMany({
-      data: tagsBD.map(tag => ({
-        tagId: tag.id,
-        topicId: topic.id
-      })),
-      skipDuplicates: true
-    });
 }
 
 const removeAllTagsFromTopic = async (id) => {

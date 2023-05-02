@@ -11,19 +11,20 @@ exports.publish = async (req, res) => {
       success: true,
       message: returnCreate,
     });
-  } 
+  }
   if (returnCreate instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
       message: "Internal server error, please restart the server",
     });
   }
-  if (returnCreate instanceof Prisma.PrismaClientValidationError) { 
+  if (returnCreate instanceof Prisma.PrismaClientValidationError) {
     return res.status(400).json({
       success: false,
       message: "Incorrect field type provided in the JSON input",
     });
   }
+  responseError[returnCreate.code](res)
 };
 
 exports.getNews = async (req, res) => {
@@ -72,14 +73,14 @@ exports.update = async (req, res) => {
       success: true,
       message: returnUpdate,
     });
-  } 
+  }
   if (returnUpdate instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
       message: "Internal server error, please restart the server",
     });
   }
-  if (returnUpdate instanceof Prisma.PrismaClientValidationError) { 
+  if (returnUpdate instanceof Prisma.PrismaClientValidationError) {
     return res.status(400).json({
       success: false,
       message: "Incorrect field type provided in the JSON input",
@@ -96,11 +97,12 @@ exports.remove = async (req, res) => {
       success: true,
       message: returnRemove,
     });
-  } 
+  }
   if (returnRemove instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
       message: "Internal server error, please restart the server",
     });
   }
+  responseError[returnRemove.code](res)
 };

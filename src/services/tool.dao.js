@@ -89,9 +89,25 @@ exports.list = async () => {
 exports.update = async (id, objTool) => {
   const { title, description, source, link, authorId, categoryId, tags } = objTool;
   try {
+    if (!tags) {
+      // Update tool without tags
+      return await prisma.tool.update({
+        where: {
+          id: parseInt(id)
+        },
+        data: {
+          title,
+          description,
+          source,
+          link,
+          authorId,
+          categoryId,
+        }
+      });
+    }
     // Remove all tags from tool
     await removeAllTagsFromTool(id);
-    // Update tool
+    // Update tool with tags
     return await prisma.tool.update({
       where: {
         id: parseInt(id)
