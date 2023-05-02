@@ -73,7 +73,7 @@ model Tool {
   link           String    @db.VarChar(600)
   author         User      @relation(fields: [authorId], references: [id])
   authorId       String
-  Category       Category  @relation(fields: [categoryId], references: [id])
+  category       Category  @relation(fields: [categoryId], references: [id])
   categoryId     Int
   tags           ToolTag[]
 }
