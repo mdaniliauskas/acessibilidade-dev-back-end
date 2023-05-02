@@ -89,6 +89,8 @@ exports.list = async () => {
 exports.update = async (id, objTool) => {
   const { title, description, source, link, authorId, categoryId, tags } = objTool;
   try {
+    // Remove all tags from tool
+    await removeAllTagsFromTool(id);
     // Update tool
     return await prisma.tool.update({
       where: {
@@ -128,11 +130,7 @@ exports.update = async (id, objTool) => {
 exports.remove = async (id) => {
   try {
     // Remove toolTag
-    await prisma.toolTag.deleteMany({
-      where: {
-        toolId: parseInt(id)
-      }
-    });
+    await removeAllTagsFromTool(id);
     // Remove tool
     return await prisma.tool.delete({
       where: {
@@ -145,4 +143,12 @@ exports.remove = async (id) => {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+const removeAllTagsFromTool = async (id) => {
+  await prisma.toolTag.deleteMany({
+    where: {
+      toolId: parseInt(id)
+    }
+  });
 }
