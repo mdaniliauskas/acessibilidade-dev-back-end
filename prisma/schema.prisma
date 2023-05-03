@@ -24,6 +24,7 @@ model User {
   replies          Reply[]
   news             News[]
   tools            Tool[]
+  articles         Article[]
 }
 
 model Topic {
@@ -78,20 +79,34 @@ model Tool {
   tags           ToolTag[]
 }
 
+model Article {
+  id             Int          @id @default(autoincrement())
+  title          String
+  description    String       @db.VarChar(10000)
+  date_published DateTime     @default(now())
+  author         User         @relation(fields: [authorId], references: [id])
+  authorId       String
+  category       Category     @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  tags           ArticleTag[]
+}
+
 model Category {
-  id     Int     @id @default(autoincrement())
-  title  String  @unique
-  topics Topic[]
-  news   News[]
-  tools  Tool[]
+  id       Int       @id @default(autoincrement())
+  title    String    @unique
+  topics   Topic[]
+  news     News[]
+  tools    Tool[]
+  articles Article[]
 }
 
 model Tag {
-  id     Int        @id @default(autoincrement())
-  title  String     @unique
-  topics TopicTag[]
-  news   NewsTag[]
-  tools  ToolTag[]
+  id       Int          @id @default(autoincrement())
+  title    String       @unique
+  topics   TopicTag[]
+  news     NewsTag[]
+  tools    ToolTag[]
+  articles ArticleTag[]
 }
 
 model TopicTag {
@@ -116,4 +131,12 @@ model ToolTag {
   toolId Int
   tag    Tag? @relation(fields: [tagId], references: [id])
   tagId  Int?
+}
+
+model ArticleTag {
+  id        Int     @id @default(autoincrement())
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId Int
+  tag       Tag?    @relation(fields: [tagId], references: [id])
+  tagId     Int?
 }

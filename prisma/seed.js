@@ -287,6 +287,58 @@ async function main() {
     }
   })
 
+  const article1 = await prisma.article.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      title: 'Check out Prisma with Next.js',
+      description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
+      authorId: user1.id,
+      categoryId: category3.id,
+      tags: {
+        createMany: {
+          data: [
+            {
+              tagId: tag1.id,
+            },
+            {
+              tagId: tag2.id,
+            },
+            {
+              tagId: tag3.id,
+            },
+          ]
+        }
+      }
+    }
+  })
+
+  const article2 = await prisma.article.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      title: 'Check out Prisma with Next.js',
+      description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
+      authorId: user2.id,
+      categoryId: category1.id,
+      tags: {
+        createMany: {
+          data: [
+            {
+              tagId: tag4.id,
+            },
+            {
+              tagId: tag5.id,
+            },
+            {
+              tagId: tag6.id,
+            },
+          ]
+        }
+      }
+    }
+  })
+
   console.log({ Categories: { category1, category2, category3 } })
   console.log({ Tags: { tag1, tag2, tag3, tag4, tag5, tag6 } })
   console.log({ Users: { user1, user2 } })
@@ -294,6 +346,7 @@ async function main() {
   console.log({ News: { news1, news2 } })
   console.log({ Replies: { reply1, reply2 } })
   console.log({ Tools: { tool1, tool2 } })
+  console.log({ Articles: { article1, article2 } })
 }
 main()
   .then(async () => {
