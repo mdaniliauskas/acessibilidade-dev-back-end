@@ -1,5 +1,5 @@
 const { Text } = require("./text");
-const { save, list, update, remove, searchById } = require("../services/topic.dao");
+const { save, list, update, remove, searchById, searchByTitle } = require("../services/topic.dao");
 
 exports.Topic = class extends Text {
   constructor({
@@ -14,19 +14,19 @@ exports.Topic = class extends Text {
     this.status = status;
   }
 
-  async publishText() { 
+  async publishText() {
     return await save(this);
   }
 
-  async changeText({ id }) { 
+  async changeText({ id }) {
     return await update(id, this);
   }
 
-  async consultText({ id }) { 
+  async consultText({ id }) {
     return await searchById(id);
   }
 
-  async listTexts() { 
+  async listTexts() {
     let returnList = await list();
     returnList = returnList.map((topic) => {
       return {
@@ -37,11 +37,22 @@ exports.Topic = class extends Text {
     return returnList;
   }
 
-  async deleteText({ id }) { 
+  async listTextsByTitle({ title }) {
+    let returnList = await searchByTitle(title);
+    returnList = returnList.map((topic) => {
+      return {
+        ...topic,
+        replies: topic.replies.length
+      }
+    })
+    return returnList;
+  }
+
+  async deleteText({ id }) {
     return await remove(id);
   }
 
-  async replyTopic() { 
+  async replyTopic() {
 
   }
 };

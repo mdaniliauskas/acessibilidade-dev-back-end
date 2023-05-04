@@ -1,4 +1,4 @@
-const { PrismaClient, sql } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -84,6 +84,38 @@ exports.searchById = async (id) => {
     await prisma.$disconnect();
   }
 }
+
+exports.searchByTitle = async (title) => {
+  try {
+    return await prisma.topic.findMany({
+      where: {
+        title: {
+          contains: title
+        }
+      },
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true,
+            specialist_area: true
+          }
+        },
+        replies: {
+          select: {
+            id: true
+          }
+        }
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 
 exports.list = async () => {
   try {
