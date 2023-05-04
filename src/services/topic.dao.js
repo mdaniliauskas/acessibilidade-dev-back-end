@@ -37,6 +37,7 @@ exports.save = async (objTopic) => {
 }
 
 exports.searchById = async (id) => {
+
   try {
     return await prisma.topic.findUnique({
       where: {
