@@ -6,7 +6,15 @@ exports.save = async (objReply) => {
   try {
     // Create a new reply
     return await prisma.reply.create({
-      data: objReply
+      data: objReply,
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true
+          }
+        }
+      }
     });
   } catch (error) {
     console.log(error);
@@ -62,7 +70,7 @@ exports.update = async (id, objReply) => {
 exports.remove = async (id) => {
   try {
     // Remove reply
-      return await prisma.reply.delete({
+    return await prisma.reply.delete({
       where: {
         id: parseInt(id)
       }
