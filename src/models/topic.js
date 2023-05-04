@@ -1,5 +1,5 @@
 const { Text } = require("./text");
-const { save, list, update, remove, searchById, searchByTitle } = require("../services/topic.dao");
+const { save, list, update, remove, searchById, fullSearch } = require("../services/topic.dao");
 
 exports.Topic = class extends Text {
   constructor({
@@ -37,8 +37,8 @@ exports.Topic = class extends Text {
     return returnList;
   }
 
-  async listTextsByTitle({ title }) {
-    let returnList = await searchByTitle(title);
+  async fullSearchList({ content }) {
+    let returnList = await fullSearch(content);
     returnList = returnList.map((topic) => {
       return {
         ...topic,

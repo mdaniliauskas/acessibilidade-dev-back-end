@@ -62,9 +62,9 @@ exports.getAll = async (req, res) => {
   });
 };
 
-exports.getAllByTitle = async (req, res) => {
+exports.getFullSearch = async (req, res) => {
   const objTopic = new Topic(req.body);
-  const returnList = await objTopic.listTextsByTitle(req.params);
+  const returnList = await objTopic.fullSearchList(req.params);
   if (returnList instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,

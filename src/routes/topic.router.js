@@ -10,7 +10,7 @@ router.get('/topic', topicController.getAll);
 
 router.get('/topic/:id', topicController.getTopic);
 
-router.get('/topic/search/:title', topicController.getAllByTitle);
+router.get('/topic/fullSearch/:content', topicController.getFullSearch);
 
 router.post('/topic', topicController.publish);
 

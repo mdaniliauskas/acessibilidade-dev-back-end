@@ -85,13 +85,56 @@ exports.searchById = async (id) => {
   }
 }
 
-exports.searchByTitle = async (title) => {
+exports.fullSearch = async (content) => {
   try {
     return await prisma.topic.findMany({
       where: {
-        title: {
-          contains: title
-        }
+        OR: [
+          {
+            title: {
+              contains: content
+            }
+          },
+          {
+            description: {
+              contains: content
+            }
+          },
+          {
+            author: {
+              OR: [
+                {
+                  first_name: {
+                    contains: content
+                  }
+                },
+                {
+                  last_name: {
+                    contains: content
+                  }
+                }
+              ]
+            }
+          },
+          {
+            category: {
+              title: {
+                contains: content
+              }
+            }
+          },
+          {
+            tags: {
+              some: {
+                tag: {
+                  title: {
+                    contains: content
+                  }
+                }
+              }
+            }
+          }
+        ]
       },
       include: {
         author: {
