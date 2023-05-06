@@ -1,5 +1,5 @@
 const { Text } = require("./text");
-const { save, list, update, remove, searchById } = require("../services/news.dao");
+const { save, list, update, remove, searchById, fullSearch } = require("../services/news.dao");
 
 exports.News = class extends Text {
   constructor({
@@ -16,23 +16,27 @@ exports.News = class extends Text {
     this.link = link;
   }
 
-  async publishText() { 
+  async publishText() {
     return await save(this);
   }
 
-  async changeText({ id }) { 
+  async changeText({ id }) {
     return await update(id, this);
   }
 
-  async consultText({ id }) { 
+  async consultText({ id }) {
     return await searchById(id);
   }
 
-  async listTexts() { 
+  async fullSearchList({ content }) {
+    return await fullSearch(content);
+  }
+
+  async listTexts() {
     return await list();
   }
 
-  async deleteText({ id }) { 
+  async deleteText({ id }) {
     return await remove(id);
   }
 

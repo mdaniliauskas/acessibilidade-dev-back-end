@@ -10,6 +10,8 @@ router.get('/news', newsController.getAll);
 
 router.get('/news/:id', newsController.getNews);
 
+router.get('/news/fullSearch/:content', newsController.getFullSearch);
+
 router.post('/news', newsController.publish);
 
 router.put('/news/:id', newsController.update);
