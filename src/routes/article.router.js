@@ -10,6 +10,8 @@ router.get('/article', articleController.getAll);
 
 router.get('/article/:id', articleController.getArticle);
 
+router.get('/article/fullSearch/:content', articleController.getFullSearch);
+
 router.post('/article', articleController.publish);
 
 router.put('/article/:id', articleController.update);

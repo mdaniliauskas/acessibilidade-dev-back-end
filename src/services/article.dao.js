@@ -73,6 +73,59 @@ exports.searchById = async (id) => {
   }
 }
 
+exports.fullSearch = async (content) => {
+  try {
+    return await prisma.article.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: content
+            }
+          },
+          {
+            description: {
+              contains: content
+            }
+          },
+          {
+            author: {
+              OR: [
+                {
+                  first_name: {
+                    contains: content
+                  }
+                },
+                {
+                  last_name: {
+                    contains: content
+                  }
+                }
+              ]
+            }
+          },
+          {
+            tags: {
+              some: {
+                tag: {
+                  title: {
+                    contains: content
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 exports.list = async () => {
   try {
     return await prisma.article.findMany();
