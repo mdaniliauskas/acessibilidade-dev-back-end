@@ -10,6 +10,8 @@ router.get('/tool', toolController.getAll);
 
 router.get('/tool/:id', toolController.getTool);
 
+router.get('/tool/fullSearch/:content', toolController.getFullSearch);
+
 router.post('/tool', toolController.publish);
 
 router.put('/tool/:id', toolController.update);

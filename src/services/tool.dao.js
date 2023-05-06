@@ -75,6 +75,70 @@ exports.searchById = async (id) => {
   }
 }
 
+exports.fullSearch = async (search) => {
+  try {
+    return await prisma.tool.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: search,
+              mode: 'insensitive'
+            }
+          },
+          {
+            description: {
+              contains: search,
+              mode: 'insensitive'
+            }
+          },
+          {
+            organization: {
+              contains: search,
+              mode: 'insensitive'
+            }
+          },
+          {
+            author: {
+              OR: [
+                {
+                  first_name: {
+                    contains: search,
+                    mode: 'insensitive'
+                  }
+                },
+                {
+                  last_name: {
+                    contains: search,
+                    mode: 'insensitive'
+                  }
+                }
+              ]
+            }
+          },
+          {
+            tags: {
+              some: {
+                tag: {
+                  title: {
+                    contains: search,
+                    mode: 'insensitive'
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 exports.list = async () => {
   try {
     return await prisma.tool.findMany();
