@@ -12,6 +12,8 @@ router.get('/topic/:id', topicController.getTopic);
 
 router.get('/topic/fullSearch/:content', topicController.getFullSearch);
 
+router.get('/topic/categorySearch/:categoryId', topicController.getByCategory);
+
 router.post('/topic', topicController.publish);
 
 router.put('/topic/:id', topicController.update);

@@ -160,6 +160,34 @@ exports.fullSearch = async (content) => {
   }
 }
 
+exports.listByCategory = async (categoryId) => {
+  try {
+    return await prisma.topic.findMany({
+      where: {
+        categoryId: parseInt(categoryId)
+      },
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true,
+            specialist_area: true
+          }
+        },
+        replies: {
+          select: {
+            id: true
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 
 exports.list = async () => {
   try {
@@ -177,7 +205,7 @@ exports.list = async () => {
             id: true
           }
         }
-      },
+      }
     });
   } catch (error) {
     console.log(error);
