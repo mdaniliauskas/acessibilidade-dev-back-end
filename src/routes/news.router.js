@@ -12,6 +12,8 @@ router.get('/news/:id', newsController.getNews);
 
 router.get('/news/fullSearch/:content', newsController.getFullSearch);
 
+router.get('/news/categorySearch/:categoryId', newsController.getByCategory);
+
 router.post('/news', newsController.publish);
 
 router.put('/news/:id', newsController.update);
