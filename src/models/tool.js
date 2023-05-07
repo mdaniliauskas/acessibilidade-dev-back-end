@@ -1,5 +1,5 @@
 const { Text } = require("./text");
-const { save, list, update, remove, searchById, fullSearch } = require("../services/tool.dao");
+const { save, list, update, remove, searchById, fullSearch, listByCategory } = require("../services/tool.dao");
 
 exports.Tool = class extends Text {
   constructor({
@@ -30,6 +30,10 @@ exports.Tool = class extends Text {
 
   async fullSearchList({ content }) {
     return await fullSearch(content);
+  }
+
+  async listTextsByCategory({ categoryId }) {
+    return await listByCategory(categoryId);
   }
 
   async listTexts() {

@@ -139,6 +139,21 @@ exports.fullSearch = async (search) => {
   }
 }
 
+exports.listByCategory = async (categoryId) => {
+  try {
+    return await prisma.tool.findMany({
+      where: {
+        categoryId: parseInt(categoryId)
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 exports.list = async () => {
   try {
     return await prisma.tool.findMany();
