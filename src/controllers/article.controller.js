@@ -64,6 +64,21 @@ exports.getFullSearch = async (req, res) => {
   });
 };
 
+exports.getByCategory = async (req, res) => {
+  const objArticle = new Article(req.body);
+  const returnList = await objArticle.listTextsByCategory(req.params);
+  if (returnList instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: returnList,
+  });
+};
+
 exports.getAll = async (req, res) => {
   const objArticle = new Article(req.body);
   const returnList = await objArticle.listTexts();
