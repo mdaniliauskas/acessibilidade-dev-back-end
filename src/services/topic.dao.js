@@ -43,7 +43,12 @@ exports.searchById = async (id) => {
       where: {
         id: parseInt(id)
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        date_published: true,
+        status: true,
         author: {
           select: {
             first_name: true,
@@ -137,7 +142,12 @@ exports.fullSearch = async (content) => {
           }
         ]
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        date_published: true,
+        status: true,
         author: {
           select: {
             first_name: true,
@@ -150,7 +160,7 @@ exports.fullSearch = async (content) => {
             id: true
           }
         }
-      },
+      }
     });
   } catch (error) {
     console.log(error);
@@ -166,7 +176,12 @@ exports.listByCategory = async (categoryId) => {
       where: {
         categoryId: parseInt(categoryId)
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        date_published: true,
+        status: true,
         author: {
           select: {
             first_name: true,
@@ -195,7 +210,12 @@ exports.listByAuthor = async (authorId) => {
       where: {
         authorId
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        date_published: true,
+        status: true,
         author: {
           select: {
             first_name: true,
@@ -221,7 +241,12 @@ exports.listByAuthor = async (authorId) => {
 exports.list = async () => {
   try {
     return await prisma.topic.findMany({
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        date_published: true,
+        status: true,
         author: {
           select: {
             first_name: true,
