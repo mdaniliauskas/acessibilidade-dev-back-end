@@ -92,6 +92,21 @@ exports.getByCategory = async (req, res) => {
   });
 };
 
+exports.getByAuthor = async (req, res) => {
+  const objTopic = new Topic(req.body);
+  const returnList = await objTopic.listTextsByAuthor(req.params);
+  if (returnList instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: returnList,
+  });
+};
+
 exports.update = async (req, res) => {
   const objTopic = new Topic(req.body);
   const returnUpdate = await objTopic.changeText(req.params);

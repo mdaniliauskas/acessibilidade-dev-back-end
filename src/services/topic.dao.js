@@ -189,6 +189,35 @@ exports.listByCategory = async (categoryId) => {
   }
 }
 
+exports.listByAuthor = async (authorId) => {
+  try {
+    return await prisma.topic.findMany({
+      where: {
+        authorId
+      },
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true,
+            specialist_area: true
+          }
+        },
+        replies: {
+          select: {
+            id: true
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 exports.list = async () => {
   try {
     return await prisma.topic.findMany({

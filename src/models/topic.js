@@ -1,5 +1,5 @@
 const { Text } = require("./text");
-const { save, list, update, remove, searchById, fullSearch, listByCategory } = require("../services/topic.dao");
+const { save, list, update, remove, searchById, fullSearch, listByCategory, listByAuthor } = require("../services/topic.dao");
 
 exports.Topic = class extends Text {
   constructor({
@@ -50,6 +50,17 @@ exports.Topic = class extends Text {
 
   async listTextsByCategory({ categoryId }) {
     let returnList = await listByCategory(categoryId);
+    returnList = returnList.map((topic) => {
+      return {
+        ...topic,
+        replies: topic.replies.length
+      }
+    })
+    return returnList;
+  }
+
+  async listTextsByAuthor({ authorId }) {
+    let returnList = await listByAuthor(authorId);
     returnList = returnList.map((topic) => {
       return {
         ...topic,
