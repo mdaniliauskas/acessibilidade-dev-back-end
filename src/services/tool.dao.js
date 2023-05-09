@@ -44,7 +44,13 @@ exports.searchById = async (id) => {
       where: {
         id: parseInt(id)
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        date_published: true,
+        organization: true,
+        link: true,
         author: {
           select: {
             first_name: true,
@@ -129,6 +135,10 @@ exports.fullSearch = async (search) => {
             }
           }
         ]
+      },
+      select: {
+        id: true,
+        title: true,
       }
     });
   } catch (error) {
@@ -144,6 +154,10 @@ exports.listByCategory = async (categoryId) => {
     return await prisma.tool.findMany({
       where: {
         categoryId: parseInt(categoryId)
+      },
+      select: {
+        id: true,
+        title: true,
       }
     });
   } catch (error) {
@@ -156,7 +170,12 @@ exports.listByCategory = async (categoryId) => {
 
 exports.list = async () => {
   try {
-    return await prisma.tool.findMany();
+    return await prisma.tool.findMany({
+      select: {
+        id: true,
+        title: true,
+      }
+    });
   } catch (error) {
     console.log(error);
     return error;
