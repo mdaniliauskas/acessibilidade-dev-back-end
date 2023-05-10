@@ -231,61 +231,61 @@ async function main() {
     }
   })
 
-  const tool1 = await prisma.tool.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      title: 'Check out Prisma with Next.js',
-      description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-      organization: "google",
-      link: "https://www.google.com",
-      categoryId: category3.id,
-      authorId: user1.id,
-      tags: {
-        createMany: {
-          data: [
-            {
-              tagId: tag1.id,
-            },
-            {
-              tagId: tag2.id,
-            },
-            {
-              tagId: tag3.id,
-            },
-          ]
-        }
-      }
-    }
-  })
+  // const tool1 = await prisma.tool.upsert({
+  //   where: { id: 1 },
+  //   update: {},
+  //   create: {
+  //     title: 'Check out Prisma with Next.js',
+  //     description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
+  //     organization: "google",
+  //     link: "https://www.google.com",
+  //     categoryId: category3.id,
+  //     authorId: user1.id,
+  //     tags: {
+  //       createMany: {
+  //         data: [
+  //           {
+  //             tagId: tag1.id,
+  //           },
+  //           {
+  //             tagId: tag2.id,
+  //           },
+  //           {
+  //             tagId: tag3.id,
+  //           },
+  //         ]
+  //       }
+  //     }
+  //   }
+  // })
 
-  const tool2 = await prisma.tool.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      title: 'Check out Prisma with Next.js',
-      description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-      organization: "google",
-      link: "https://www.google.com",
-      categoryId: category1.id,
-      authorId: user2.id,
-      tags: {
-        createMany: {
-          data: [
-            {
-              tagId: tag4.id,
-            },
-            {
-              tagId: tag5.id,
-            },
-            {
-              tagId: tag6.id,
-            },
-          ]
-        }
-      }
-    }
-  })
+  // const tool2 = await prisma.tool.upsert({
+  //   where: { id: 2 },
+  //   update: {},
+  //   create: {
+  //     title: 'Check out Prisma with Next.js',
+  //     description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
+  //     organization: "google",
+  //     link: "https://www.google.com",
+  //     categoryId: category1.id,
+  //     authorId: user2.id,
+  //     tags: {
+  //       createMany: {
+  //         data: [
+  //           {
+  //             tagId: tag4.id,
+  //           },
+  //           {
+  //             tagId: tag5.id,
+  //           },
+  //           {
+  //             tagId: tag6.id,
+  //           },
+  //         ]
+  //       }
+  //     }
+  //   }
+  // })
 
   const article1 = await prisma.article.upsert({
     where: { id: 1 },
