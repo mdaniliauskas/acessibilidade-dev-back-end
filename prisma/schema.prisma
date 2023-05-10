@@ -72,6 +72,7 @@ model Tool {
   date_published DateTime  @default(now())
   organization   String
   link           String    @db.VarChar(600)
+  image          Bytes
   author         User      @relation(fields: [authorId], references: [id])
   authorId       String
   category       Category  @relation(fields: [categoryId], references: [id])

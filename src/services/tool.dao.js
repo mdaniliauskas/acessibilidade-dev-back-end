@@ -2,10 +2,38 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-exports.save = async (objTool) => {
+exports.save = async (objTool, image) => {
   const { title, description, organization, link, authorId, categoryId, tags } = objTool;
   try {
-    // Create a new tool
+    if (tags) {
+      // Create a new tool with tags
+      return await prisma.tool.create({
+        data: {
+          title,
+          description,
+          organization,
+          link,
+          authorId,
+          categoryId,
+          image,
+          tags: {
+            create: tags.map(tag => ({
+              tag: {
+                connectOrCreate: {
+                  where: {
+                    title: tag.toLowerCase()
+                  },
+                  create: {
+                    title: tag.toLowerCase()
+                  }
+                }
+              }
+            }))
+          }
+        }
+      });
+    }
+    // Create a new tool without tags
     return await prisma.tool.create({
       data: {
         title,
@@ -13,21 +41,8 @@ exports.save = async (objTool) => {
         organization,
         link,
         authorId,
-        categoryId,
-        tags: {
-          create: tags.map(tag => ({
-            tag: {
-              connectOrCreate: {
-                where: {
-                  title: tag.toLowerCase()
-                },
-                create: {
-                  title: tag.toLowerCase()
-                }
-              }
-            }
-          }))
-        }
+        categoryId: parseInt(categoryId),
+        image
       }
     });
   } catch (error) {
@@ -51,6 +66,7 @@ exports.searchById = async (id) => {
         date_published: true,
         organization: true,
         link: true,
+        image: true,
         author: {
           select: {
             first_name: true,
@@ -139,6 +155,7 @@ exports.fullSearch = async (search) => {
       select: {
         id: true,
         title: true,
+        image: true
       }
     });
   } catch (error) {
@@ -158,6 +175,7 @@ exports.listByCategory = async (categoryId) => {
       select: {
         id: true,
         title: true,
+        image: true
       }
     });
   } catch (error) {
@@ -174,6 +192,7 @@ exports.list = async () => {
       select: {
         id: true,
         title: true,
+        image: true
       }
     });
   } catch (error) {

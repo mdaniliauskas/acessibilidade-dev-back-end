@@ -16,8 +16,8 @@ exports.Tool = class extends Text {
     this.link = link;
   }
 
-  async publishText() {
-    return await save(this);
+  async publishText(image) {
+    return await save(this, image);
   }
 
   async changeText({ id }) {

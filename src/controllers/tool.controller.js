@@ -1,12 +1,22 @@
 const { Tool } = require("../models/tool");
 const { responseError } = require("../helpers/responseError");
+const { clearUploadFolders } = require("../helpers/clearUploadFolders");
 const { Prisma } = require('@prisma/client');
+const fs = require('fs');
 
 exports.publish = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send({
+      success: false,
+      message: "Incorrect field type provided in the JSON input, please send a file",
+    });
+  }
+  const image = fs.readFileSync(req.file.path);
   const objTool = new Tool(req.body);
-  const returnCreate = await objTool.publishText();
+  const returnCreate = await objTool.publishText(image);
 
   if (returnCreate.id) {
+    clearUploadFolders();
     return res.status(201).json({
       success: true,
       message: returnCreate,
