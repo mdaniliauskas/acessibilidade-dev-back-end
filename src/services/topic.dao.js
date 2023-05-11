@@ -49,6 +49,7 @@ exports.searchById = async (id) => {
         description: true,
         date_published: true,
         status: true,
+        votes: true,
         author: {
           select: {
             first_name: true,
@@ -94,6 +95,9 @@ exports.searchById = async (id) => {
 exports.fullSearch = async (content) => {
   try {
     return await prisma.topic.findMany({
+      orderBy: {
+        date_published: 'desc'
+      },
       where: {
         OR: [
           {
@@ -148,6 +152,7 @@ exports.fullSearch = async (content) => {
         description: true,
         date_published: true,
         status: true,
+        votes: true,
         author: {
           select: {
             first_name: true,
@@ -173,6 +178,9 @@ exports.fullSearch = async (content) => {
 exports.listByCategory = async (categoryId) => {
   try {
     return await prisma.topic.findMany({
+      orderBy: {
+        date_published: 'desc'
+      },
       where: {
         categoryId: parseInt(categoryId)
       },
@@ -182,6 +190,7 @@ exports.listByCategory = async (categoryId) => {
         description: true,
         date_published: true,
         status: true,
+        votes: true,
         author: {
           select: {
             first_name: true,
@@ -207,6 +216,9 @@ exports.listByCategory = async (categoryId) => {
 exports.listByAuthor = async (authorId) => {
   try {
     return await prisma.topic.findMany({
+      orderBy: {
+        date_published: 'desc'
+      },
       where: {
         authorId
       },
@@ -216,6 +228,7 @@ exports.listByAuthor = async (authorId) => {
         description: true,
         date_published: true,
         status: true,
+        votes: true,
         author: {
           select: {
             first_name: true,
@@ -241,12 +254,16 @@ exports.listByAuthor = async (authorId) => {
 exports.list = async () => {
   try {
     return await prisma.topic.findMany({
+      orderBy: {
+        date_published: 'desc'
+      },
       select: {
         id: true,
         title: true,
         description: true,
         date_published: true,
         status: true,
+        votes: true,
         author: {
           select: {
             first_name: true,
@@ -270,7 +287,7 @@ exports.list = async () => {
 }
 
 exports.update = async (id, objTopic) => {
-  const { title, description, status, authorId, categoryId, tags } = objTopic;
+  const { title, description, status, votes, authorId, categoryId, tags } = objTopic;
   try {
     if (!tags) {
       // Update topic without tags
@@ -282,6 +299,7 @@ exports.update = async (id, objTopic) => {
           title,
           description,
           status,
+          votes,
           authorId,
           categoryId,
         }
@@ -298,6 +316,7 @@ exports.update = async (id, objTopic) => {
         title,
         description,
         status,
+        votes,
         authorId,
         categoryId,
         tags: {

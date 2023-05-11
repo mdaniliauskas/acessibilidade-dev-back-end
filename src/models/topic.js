@@ -6,11 +6,13 @@ exports.Topic = class extends Text {
     title,
     description,
     status,
+    votes,
     authorId,
     categoryId,
     tags
   }) {
     super({ title, description, authorId, categoryId, tags });
+    this.votes = votes;
     this.status = status;
   }
 
