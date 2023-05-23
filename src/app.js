@@ -5,11 +5,12 @@ const newsRoutes = require('./routes/news.router');
 const replyRoutes = require('./routes/reply.router');
 const toolRoutes = require('./routes/tool.router');
 const articleRoutes = require('./routes/article.router');
+const openaiRoutes = require('./routes/openai.router');
 var cors = require('cors');
 const app = express();
 
 app.use(cors())
 
-app.use(userRoutes, topicRoutes, newsRoutes, replyRoutes, toolRoutes, articleRoutes);
+app.use(userRoutes, topicRoutes, newsRoutes, replyRoutes, toolRoutes, articleRoutes, openaiRoutes);
 
 module.exports = app;

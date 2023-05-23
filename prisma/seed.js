@@ -345,7 +345,7 @@ async function main() {
   console.log({ Topics: { topic1, topic2 } })
   console.log({ News: { news1, news2 } })
   console.log({ Replies: { reply1, reply2 } })
-  console.log({ Tools: { tool1, tool2 } })
+  //console.log({ Tools: { tool1, tool2 } })
   console.log({ Articles: { article1, article2 } })
 }
 main()
