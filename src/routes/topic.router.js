@@ -20,6 +20,8 @@ router.post('/topic', topicController.publish);
 
 router.put('/topic/:id', topicController.update);
 
+router.put('/topic/:id/votes', topicController.updateVotes);
+
 router.delete('/topic/:id', topicController.remove);
 
 module.exports = router;

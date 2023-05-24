@@ -343,6 +343,35 @@ exports.update = async (id, objTopic) => {
   }
 }
 
+exports.updateVotes = async (id, objTopic) => {
+  const { votes } = objTopic;
+  try {
+    const votesDB = await prisma.topic.findUnique({
+      where: {
+        id: parseInt(id)
+      },
+
+    });
+    // Update topic votes
+    return await prisma.topic.update({
+      where: {
+        id: parseInt(id)
+      },
+      data: {
+        votes: votesDB.votes += votes
+      },
+      select: {
+        votes: true,
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 exports.remove = async (id) => {
   try {
     // Remove all tags from topic

@@ -1,5 +1,5 @@
 const { Text } = require("./text");
-const { save, list, update, remove, searchById, fullSearch, listByCategory, listByAuthor } = require("../services/topic.dao");
+const { save, list, update, remove, searchById, fullSearch, listByCategory, listByAuthor, updateVotes } = require("../services/topic.dao");
 
 exports.Topic = class extends Text {
   constructor({
@@ -22,6 +22,10 @@ exports.Topic = class extends Text {
 
   async changeText({ id }) {
     return await update(id, this);
+  }
+
+  async changeVotes({ id }) {
+    return await updateVotes(id, this);
   }
 
   async consultText({ id }) {

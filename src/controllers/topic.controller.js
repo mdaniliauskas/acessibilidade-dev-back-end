@@ -131,6 +131,30 @@ exports.update = async (req, res) => {
   responseError[returnUpdate.code](res)
 };
 
+exports.updateVotes = async (req, res) => {
+  const objTopic = new Topic(req.body);
+  const returnUpdate = await objTopic.changeVotes((req.params));
+  if (returnUpdate.votes !== undefined) {
+    return res.status(200).json({
+      success: true,
+      message: returnUpdate,
+    });
+  }
+  if (returnUpdate instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error, please restart the server",
+    });
+  }
+  if (returnUpdate instanceof Prisma.PrismaClientValidationError) {
+    return res.status(400).json({
+      success: false,
+      message: "Incorrect field type provided in the JSON input",
+    });
+  }
+  responseError[returnUpdate.code](res)
+};
+
 exports.remove = async (req, res) => {
   const objTopic = new Topic(req.body);
   const returnRemove = await objTopic.deleteText(req.params);
