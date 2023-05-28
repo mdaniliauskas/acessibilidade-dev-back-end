@@ -33,14 +33,14 @@ exports.Topic = class extends Text {
   }
 
   async listTexts() {
-    let returnList = await list();
-    returnList = returnList.map((topic) => {
+    let { topics, topicsForCategory } = await list();
+    topics = topics.map((topic) => {
       return {
         ...topic,
         replies: topic.replies.length
       }
     })
-    return returnList;
+    return { topics, topicsForCategory };
   }
 
   async fullSearchList({ content }) {

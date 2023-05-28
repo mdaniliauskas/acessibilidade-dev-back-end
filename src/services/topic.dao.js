@@ -253,14 +253,13 @@ exports.listByAuthor = async (authorId) => {
 
 exports.list = async () => {
   try {
-    return await prisma.topic.findMany({
+    const topics = await prisma.topic.findMany({
       orderBy: {
         date_published: 'desc'
       },
       select: {
         id: true,
         title: true,
-        description: true,
         date_published: true,
         status: true,
         votes: true,
@@ -268,9 +267,9 @@ exports.list = async () => {
           select: {
             first_name: true,
             last_name: true,
-            specialist_area: true
           }
         },
+        categoryId: true,
         replies: {
           select: {
             id: true
@@ -278,6 +277,11 @@ exports.list = async () => {
         }
       }
     });
+    const topicsForCategory = await prisma.topic.groupBy({
+      by: ['categoryId'],
+      _count: true
+    });
+    return { topics, topicsForCategory };
   } catch (error) {
     console.log(error);
     return error;
