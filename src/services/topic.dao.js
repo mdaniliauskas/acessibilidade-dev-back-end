@@ -50,6 +50,7 @@ exports.searchById = async (id) => {
         date_published: true,
         status: true,
         votes: true,
+        authorId: true,
         author: {
           select: {
             first_name: true,
