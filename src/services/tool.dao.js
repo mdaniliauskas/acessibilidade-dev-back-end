@@ -188,13 +188,7 @@ exports.listByCategory = async (categoryId) => {
 
 exports.list = async () => {
   try {
-    return await prisma.tool.findMany({
-      select: {
-        id: true,
-        title: true,
-        image: true
-      }
-    });
+    return await prisma.tool.findMany();
   } catch (error) {
     console.log(error);
     return error;
