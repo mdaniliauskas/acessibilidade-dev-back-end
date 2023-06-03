@@ -57,6 +57,7 @@ exports.searchById = async (id) => {
             last_name: true
           }
         },
+        categoryId: true,
         category: {
           select: {
             title: true
