@@ -32,14 +32,14 @@ exports.generate = async (req, res) => {
       temperature: 0.6,
       max_tokens: 4,
     });
-    if (completion.data.choices[0].text === "\n\nSim.") {
+    if (completion.data.choices[0].text.toUpperCase().includes("SIM")) {
       completion = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: generatePrompt(text),
         temperature: 0.6,
         max_tokens: 256,
       });
-    } else if (completion.data.choices[0].text === "\n\nNão") {
+    } else if (completion.data.choices[0].text.toUpperCase().includes("NÃO")) {
       res.status(400).json({
         error: {
           message: "Está dúvida não é sobre acessibilidade digital!",
