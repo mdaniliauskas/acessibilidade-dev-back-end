@@ -30,19 +30,19 @@ exports.generate = async (req, res) => {
       model: "text-davinci-003",
       prompt: validatePrompt(text),
       temperature: 0.6,
-      max_tokens: 4,
+      max_tokens: 16,
     });
     if (completion.data.choices[0].text.toUpperCase().includes("SIM")) {
       completion = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: generatePrompt(text),
         temperature: 0.6,
-        max_tokens: 256,
+        max_tokens: 768,
       });
     } else if (completion.data.choices[0].text.toUpperCase().includes("NÃO")) {
       res.status(400).json({
         error: {
-          message: "Está dúvida não é sobre acessibilidade digital!",
+          message: "Por favor, reformule sua pergunta, parece que sua duvida não é sobre acessibilidade!",
         }
       });
       return;
@@ -64,9 +64,9 @@ exports.generate = async (req, res) => {
   }
 }
 function validatePrompt(text) {
-  return `Essa dúvida é sobre acessibilidade digital, responda com sim ou não: "${text}"`;
+  return `Essa dúvida é sobre acessibilidade ou acessibilidade digital? responda com sim ou não: "${text}"`;
 }
 
 function generatePrompt(text) {
-  return `Dê uma solução para essa duvída sobre acessibilidade digital: ${text}`;
+  return `Dê uma solução usando no máximo 300 palavras, para essa duvida sobre acessibilidade: ${text}`;
 }
