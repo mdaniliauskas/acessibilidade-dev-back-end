@@ -32,6 +32,7 @@ exports.generate = async (req, res) => {
       temperature: 0.6,
       max_tokens: 16,
     });
+    console.log(completion.data.choices[0].text);
     if (completion.data.choices[0].text.toUpperCase().includes("SIM")) {
       completion = await openai.createCompletion({
         model: "text-davinci-003",
@@ -64,7 +65,7 @@ exports.generate = async (req, res) => {
   }
 }
 function validatePrompt(text) {
-  return `Essa dúvida é sobre acessibilidade ou acessibilidade digital? responda com sim ou não: "${text}"`;
+  return `Essa dúvida está relacionada a acessibilidade digital? responda com sim ou não: "${text}"`;
 }
 
 function generatePrompt(text) {
