@@ -204,12 +204,13 @@ GET    /tool                # Listar ferramentas
 
 ### 🎓 **TCC FATEC - Análise e Desenvolvimento de Sistemas**
 
-| Desenvolvedor | GitHub | Especialização |
-|--------------|--------|----------------|
-| **Marcelo Daniliauskas** | [@mdaniliauskas](https://github.com/mdaniliauskas) | Backend Architecture & IA Integration |
-| **Arthur Nascimento** | [@Arthur-cmd256](https://github.com/Arthur-cmd256) | Full-Stack Development |
-| **Luan Teixeira** | [@luanLTS](https://github.com/luanLTS) | Frontend & UX |
-| **Weslley Rodrigues** | [@weslleyrods](https://github.com/weslleyrods) | Database & DevOps |
+| Desenvolvedor | GitHub |
+|--------------|--------|
+| **Marcelo Daniliauskas** | [@mdaniliauskas](https://github.com/mdaniliauskas) |
+| **Arthur Nascimento** | [@Arthur-cmd256](https://github.com/Arthur-cmd256) |
+| **Luan Teixeira** | [@luanLTS](https://github.com/luanLTS) |
+| **Ranayna Alves de Oliveira** | [@Ranayna](https://github.com/Ranayna) |
+| **Weslley Rodrigues** | [@weslleyrods](https://github.com/weslleyrods) |
 
 > **🏆 Projeto aprovado com destaque pela banca examinadora da FATEC**  
 > **🤝 Desenvolvimento colaborativo com metodologia ágil**  
@@ -268,4 +269,3 @@ GET    /tool                # Listar ferramentas
     <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn">
   </a>
 </p>
-
